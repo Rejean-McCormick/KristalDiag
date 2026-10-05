@@ -1,0 +1,11 @@
+{
+  "schema": "kristaldiag.driver.v1",
+  "implementation": "Example implementation",
+  "claimed_profile": "V7-Reader",
+  "actions": {
+    "self_test": {
+      "argv": ["python", "-c", "import json; print(json.dumps({'status':'ok'}))"],
+      "description": "Trusted implementation self-test. Executed only with --allow-exec."
+    }
+  }
+}

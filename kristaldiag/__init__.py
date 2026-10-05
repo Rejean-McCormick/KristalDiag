@@ -1,0 +1,5 @@
+VERSION='0.7.0'
+STANDARD_TARGET='7.0.0-draft.2'
+REPORT_SCHEMA='kristaldiag.level-result.v1'
+SUMMARY_SCHEMA='kristaldiag.summary.v1'
+VERDICT_SCHEMA='kristaldiag.conformance-verdict.v1'

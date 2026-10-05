@@ -1,0 +1,11 @@
+.kristaldiag/
+.selftest-evidence/
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+dist/
+build/
+*.egg-info/
+.levelupdiag/
+kristaldiag.config.local.json

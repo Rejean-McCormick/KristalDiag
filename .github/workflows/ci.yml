@@ -1,0 +1,129 @@
+name: KristalDiag CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kristaldiag-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  self-test:
+    name: Self-test Python ${{ matrix.python }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+
+    steps:
+      - name: Checkout KristalDiag
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install KristalDiag and tests
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e .
+          python -m pip install pytest
+
+      - name: Unit tests
+        run: python -m pytest -q
+
+      - name: Built-in reference self-test
+        run: kristaldiag self-test
+
+  framework-v7-substrate:
+    name: Independent v7 substrate gate
+    needs: self-test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    env:
+      KRISTAL_FRAMEWORK_REF: "00a00e061dd216a9bcdb281cf1eeef80ce61410e"
+
+    steps:
+      - name: Checkout KristalDiag
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          path: KristalDiag
+          persist-credentials: false
+
+      - name: Checkout pinned Kristal Framework
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          repository: Rejean-McCormick/Kristal-Framework
+          ref: ${{ env.KRISTAL_FRAMEWORK_REF }}
+          path: Kristal-Framework
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+
+      - name: Install KristalDiag
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e KristalDiag
+
+      - name: Record exact subjects
+        run: |
+          mkdir -p ci-evidence
+          {
+            echo "KristalDiag=$(git -C KristalDiag rev-parse HEAD)"
+            echo "Kristal-Framework=$(git -C Kristal-Framework rev-parse HEAD)"
+            echo "Kristal-Version=$(cat Kristal-Framework/VERSION)"
+            python --version
+          } | tee ci-evidence/subjects.txt
+
+      - name: KristalDiag doctor
+        run: kristaldiag doctor Kristal-Framework
+
+      - name: Qualify frozen v7 semantic substrate
+        run: >-
+          kristaldiag conform Kristal-Framework
+          --profile V7-Projection
+          --control-dir "$RUNNER_TEMP/kristaldiag-v7"
+
+      - name: Verify evidence integrity
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/kristaldiag-v7/current/summary.json" ]; then
+            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-v7/current/summary.json"
+          else
+            echo "No KristalDiag summary was produced."
+            exit 1
+          fi
+
+      - name: Copy evidence for artifact upload
+        if: always()
+        run: |
+          mkdir -p ci-evidence/kristaldiag-v7
+          if [ -d "$RUNNER_TEMP/kristaldiag-v7/current" ]; then
+            cp -a "$RUNNER_TEMP/kristaldiag-v7/current/." ci-evidence/kristaldiag-v7/
+          fi
+
+      - name: Upload independent conformance evidence
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: kristaldiag-v7-substrate-${{ github.sha }}
+          if-no-files-found: warn
+          retention-days: 30
+          path: ci-evidence/
