@@ -23,6 +23,16 @@ LEVELS = {
     'K12': {'name':'Determinism & Reproducibility','depends_on':['K04'],'parallel_safe':False,'timeout_seconds':300,'category':'reproducibility'},
     'K13': {'name':'Negative & Adversarial Corpus','depends_on':['K04'],'parallel_safe':False,'timeout_seconds':300,'category':'negative'},
     'K14': {'name':'Conformance & Release Gate','depends_on':[],'parallel_safe':False,'timeout_seconds':60,'category':'gate'},
+    'K15': {'name':'V9 Machine Contracts','depends_on':['K00','K01'],'parallel_safe':True,'timeout_seconds':180,'category':'v9'},
+    'K16': {'name':'V9 Independent Logical Commitments','depends_on':['K15'],'parallel_safe':False,'timeout_seconds':300,'category':'v9'},
+    'K17': {'name':'V9 State Snapshot Semantics','depends_on':['K15','K16'],'parallel_safe':True,'timeout_seconds':180,'category':'v9'},
+    'K18': {'name':'V9 Derivations & Reproducibility','depends_on':['K15','K16'],'parallel_safe':True,'timeout_seconds':180,'category':'v9'},
+    'K19': {'name':'V9 Materialization Binding','depends_on':['K15','K16'],'parallel_safe':True,'timeout_seconds':180,'category':'v9'},
+    'K20': {'name':'V9 Exchange Binding','depends_on':['K15','K17'],'parallel_safe':True,'timeout_seconds':180,'category':'v9'},
+    'K21': {'name':'V9 Build / Publish / Activate','depends_on':['K15','K17'],'parallel_safe':False,'timeout_seconds':240,'category':'v9'},
+    'K22': {'name':'V9 Polymorphism Workloads','depends_on':['K15','K16'],'parallel_safe':False,'timeout_seconds':240,'category':'v9'},
+    'K23': {'name':'V9 Negative & Invariance Corpus','depends_on':['K16'],'parallel_safe':False,'timeout_seconds':240,'category':'v9'},
+    'K24': {'name':'V9 Inherited Compatibility Substrate','depends_on':['K15'],'parallel_safe':False,'timeout_seconds':300,'category':'compatibility'},
     'R00': {'name':'Documentation & Link Integrity','depends_on':['N02'],'parallel_safe':True,'timeout_seconds':240,'category':'release'},
     'R01': {'name':'Snapshot & Manifest Reproducibility','depends_on':['N02'],'parallel_safe':False,'timeout_seconds':300,'category':'release'},
     'R02': {'name':'Git & Release Identity','depends_on':['N01'],'parallel_safe':True,'timeout_seconds':120,'category':'release'},
@@ -33,8 +43,9 @@ LEVELS = {
 CAMPAIGNS = {
     'baseline': ['N00','N01','N02','N03','N04','N06'],
     'standard': ['N00','N01','N02','N03','N04','N06','K00','K01','K02','K03','K04','K12','K13'],
-    'deep': ['N00','N01','N02','N03','N04','N05','N06'] + [f'K{i:02d}' for i in range(14)],
-    'release': ['N00','N01','N02','N03','N04','N05','N06'] + [f'K{i:02d}' for i in range(14)] + [f'R{i:02d}' for i in range(5)],
+    'deep': ['N00','N01','N02','N03','N04','N05','N06'] + [f'K{i:02d}' for i in range(14)] + [f'K{i:02d}' for i in range(15,25)],
+    'v9': ['N00','N01','N02','N03','N04','N06','K00','K01'] + [f'K{i:02d}' for i in range(15,25)],
+    'release': ['N00','N01','N02','N03','N04','N05','N06'] + [f'K{i:02d}' for i in range(14)] + [f'K{i:02d}' for i in range(15,25)] + [f'R{i:02d}' for i in range(5)],
 }
 
 ORDER = list(LEVELS)

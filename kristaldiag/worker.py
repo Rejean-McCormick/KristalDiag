@@ -3,6 +3,7 @@ import argparse,time
 from pathlib import Path
 from .checks import CHECKS
 from .neutral import NEUTRAL_CHECKS
+from .v9_checks import V9_CHECKS
 from .release_checks import RELEASE_CHECKS
 from .config import load_config
 from .discovery import discover
@@ -13,7 +14,7 @@ from .utils import utc_now,write_json
 from .models import Finding,LevelResult
 from .manifest import LEVELS
 
-ALL_CHECKS={**NEUTRAL_CHECKS,**CHECKS,**RELEASE_CHECKS}
+ALL_CHECKS={**NEUTRAL_CHECKS,**CHECKS,**V9_CHECKS,**RELEASE_CHECKS}
 
 def execute_level(*,level:str,target:Path,repo:Path,config_path:Path,control_dir:Path,run_id:str,output:Path,profile:str|None=None,allow_exec:bool=False,interop_evidence:Path|None=None):
     target=target.resolve();repo=repo.resolve();cfg=load_config(repo,target,config_path=config_path,control_dir=control_dir)

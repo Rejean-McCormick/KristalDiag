@@ -1,119 +1,80 @@
-# KristalDiag v7
+# KristalDiag v9
 
 [![KristalDiag CI](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/ci.yml/badge.svg)](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/ci.yml)
-[![Framework Release Audit](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/framework-release-audit.yml/badge.svg)](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/framework-release-audit.yml)
-[![Kristal Standard CI](https://github.com/Rejean-McCormick/Kristal-Framework/actions/workflows/ci.yml/badge.svg)](https://github.com/Rejean-McCormick/Kristal-Framework/actions/workflows/ci.yml)
 
-**KristalDiag is the consolidated diagnostic, release-qualification and conformance suite for Kristal Standard v7.**
+**KristalDiag is the independent diagnostic, conformance and release-qualification suite for Kristal.**
 
-It supersedes the Kristal-specific `levelupdiag_kristal` harness while preserving its strongest operational mechanisms. It remains independent from the Standard and from implementations such as Kompiler.
+Current target: **Kristal `9.0.0-draft.1`**. It preserves the existing v7 qualification profiles and adds an independent Python qualification surface for Kristal v9 Semantic State Architecture.
 
 ```text
-Kristal Standard v7 = normative contract
-KristalDiag          = independent examiner / diagnostic harness
-Kompiler             = one implementation / consumer
-Kristal / Kristall   = artifacts or implementations under test
-```
-
-Target standard: **Kristal `7.0.0-draft.2`**. Portable compatibility boundary: **`kristal_state/6.0`**.
-
-## Public verification
-
-KristalDiag is executed on clean GitHub-hosted runners independently from the Kristal Framework repository.
-
-The automatic CI has two distinct layers:
-
-- **Self-test matrix:** installs and tests KristalDiag independently on Python 3.11, 3.12 and 3.13.
-- **Independent v7 substrate gate:** checks out an explicitly pinned Kristal Framework revision and applies the `V7-Projection` qualification profile to its frozen v6/v7 semantic substrate.
-- **Evidence verification:** generated KristalDiag evidence is validated independently with `verify-run`.
-- **Evidence retention:** qualification results and exact component revisions are retained as GitHub Actions artifacts.
-
-The release audit is intentionally separate and manually triggered. It executes the broader KristalDiag release campaign against the pinned Framework subject and retains the resulting evidence.
-
-```text
-Kristal Framework = normative subject
+Kristal Framework = normative specification + reference implementation
 KristalDiag        = independent examiner
-GitHub runner      = disposable external execution environment
-Evidence bundle    = reproducible qualification record
 ```
 
-A failing KristalDiag gate is not silently converted into a warning. It represents either a diagnostic/infrastructure defect or a concrete disagreement between the examiner and the examined Standard that must be resolved explicitly.
-
-KristalDiag currently targets the **v7 semantic surface**. It does not claim complete Kristal v8 conformance. Native v8 conformance remains the responsibility of the Kristal Framework's own normative validation and TCK.
-
-## Three diagnostic planes
-
-| Range | Role |
-|---|---|
-| N00–N06 | neutral harness, repository, tooling and security diagnostics |
-| K00–K14 | Kristal v7 semantic conformance and profile gating |
-| R00–R04 | release engineering and ratification evidence |
-
-This separation is intentional. A missing Git tag must not redefine Kristal semantics; an invalid Mesh must not be downgraded to repository hygiene.
+The v9 commitment implementation in KristalDiag does **not** import or execute the Framework JavaScript commitment code. It independently implements the normative projection, domain separation, JCS and SHA-256 rules and compares its results with the normative golden vectors.
 
 ## Quick start
 
 ```bash
-python kristaldiag.py doctor
-python kristaldiag.py list
+python -m pip install -e .
 
-# Neutral/repository campaigns inherited from LevelUpDiag
-python kristaldiag.py run baseline /path/to/target
-python kristaldiag.py run standard /path/to/target
-python kristaldiag.py run deep /path/to/target
-python kristaldiag.py run release /path/to/target
+kristaldiag doctor --target .
+kristaldiag self-test
 
-# Normative Kristal v7 qualification
-python kristaldiag.py conform /path/to/target --profile V7-Reader
-python kristaldiag.py conform /path/to/target --profile V7-Projection
+# Kristal v9
+kristaldiag conform /path/to/Kristal-Framework --profile V9-State-Reader
+kristaldiag conform /path/to/Kristal-Framework --profile V9-Full
 
-# Evidence inspection
-python kristaldiag.py triage-current /path/to/target
-python kristaldiag.py verify-run /path/to/target/.kristaldiag/current/summary.json
+# Historical v7 profiles remain available
+kristaldiag conform /path/to/target --profile V7-Projection
+
+# Operational campaigns
+kristaldiag run baseline /path/to/target
+kristaldiag run v9 /path/to/target
+kristaldiag run release /path/to/target
 ```
 
-Installed form:
+## V9 profiles
 
-```bash
-pip install .
-kristaldiag conform /path/to/kristall --profile V7-Projection
+| Profile | Qualification surface |
+|---|---|
+| `V9-State-Reader` | schemas, independent commitments, snapshots, polymorphism, negative corpus |
+| `V9-Builder` | State Reader + derivations/reproducibility |
+| `V9-Materializer` | State Reader + materialization binding |
+| `V9-Publisher` | State Reader + Build/Publish/Activate semantics |
+| `V9-Full` | Builder + Materializer + Exchange + Publisher + inherited v6/v7/v8 compatibility |
+
+A required `SKIP` is fail-closed by the K14 gate. Qualification never grants execution authority, publication authority, epistemic authority or truth.
+
+## V9 levels
+
+KristalDiag keeps K00–K13 for the historical v6/v7 substrate and K14 as the final gate. V9 adds K15–K24:
+
+```text
+K15  machine contracts
+K16  independent logical commitments
+K17  state snapshot semantics
+K18  derivations and reproducibility
+K19  materialization binding
+K20  exchange binding
+K21  build / publish / activate
+K22  polymorphic workload corpus
+K23  negative and invariance corpus
+K24  inherited v6/v7/v8 compatibility substrate
 ```
 
-## Conformance profiles
+## Independent frozen baseline
 
-- `V7-Reader`
-- `V7-Mesh`
-- `V7-Projection`
-- `V7-Kristall`
+KristalDiag contains two intentionally separate contract sets:
 
-Every profile includes the neutral read-oriented harness levels `N00`, `N01`, `N02`, `N03`, `N04`, and `N06`, then the profile-specific Kristal semantic levels. `N05` (declared command execution) and `R00–R04` are deliberately outside semantic profile definitions.
+- its legacy v6/v7 fixtures, retained so historical `V7-*` profiles remain stable;
+- `kristaldiag/resources/baseline/9.0.0-draft.1/`, an exact examiner copy of the v6/v7/v8 substrate pinned by Kristal v9's compatibility lock.
 
-Required `SKIP` evidence is fail-closed as `BLOCKED` at K14. `V7-Kristall` may remain `PARTIAL` until independent interoperability evidence exists.
+This prevents upgrading KristalDiag to v9 from silently rewriting what its older v7 profiles meant.
 
-## Campaigns
+## Read-only boundary
 
-`baseline` performs generic read-oriented repository diagnostics and executes no target command.
-
-`standard` adds the core reader/identity checks for Kristal v7.
-
-`deep` runs the neutral layer plus all K00–K13 semantic diagnostics. Declared validators in N05 still require `--allow-exec`.
-
-`release` extends `deep` with R00–R04 release-engineering evidence: documentation/link integrity, reproducible diagnostic snapshot, Git/release identity, signature/trust surface and contract/TCK/profile consistency.
-
-## Process isolation
-
-Selected N/K/R levels execute in fresh Python processes by default. Dependencies are explicit and independent `parallel_safe` levels are scheduled concurrently with a bounded worker count. A crashed level cannot poison the interpreter state of another level.
-
-```bash
-kristaldiag run deep TARGET --jobs 4
-kristaldiag run deep TARGET --jobs 4 --fail-fast
-```
-
-## Execution and authority boundary
-
-KristalDiag does not repair targets and grants no mutation or automation authority.
-
-Target commands are never guessed. N05 only executes validators explicitly declared in `kristaldiag.config.json`, and only with `--allow-exec`. Kristal implementation hooks use explicit argv arrays from `kristaldiag-driver.json`, `shell=False`, bounded timeouts, and also require `--allow-exec`.
+KristalDiag fingerprints the target before and after qualification. Target code is not imported. Target commands are never guessed. Driver commands execute only with `--allow-exec`, use argv arrays with `shell=False`, and run under bounded timeouts.
 
 Every conformance verdict states:
 
@@ -124,41 +85,36 @@ Every conformance verdict states:
 }
 ```
 
-The complete target tree is fingerprinted before and after a run. Unauthorized mutation makes K14 return `ERROR`.
-
 ## Evidence
 
+Each run produces a verifiable evidence bundle under `.kristaldiag/` (or the selected `--control-dir`):
+
 ```text
-.kristaldiag/
-├── current/
-│   ├── effective_config.json
-│   ├── levels/<ID>/result.json
-│   ├── summary.json
-│   ├── summary.txt
-│   ├── report.md
-│   ├── conformance-verdict.json
-│   └── evidence-manifest.json
-├── current-run.json
-└── runs/<run_id>/...
+current/
+├── effective_config.json
+├── levels/<ID>/result.json
+├── summary.json
+├── summary.txt
+├── report.md
+├── conformance-verdict.json
+└── evidence-manifest.json
 ```
 
-`verify-run` validates report schemas, cross-file identity, verdict coherence and every SHA-256 in the evidence manifest.
+Verify it independently with:
 
-## LevelUpDiag compatibility
-
-The former Kristal-specific LevelUpDiag harness is consolidated here. A `levelupdiag.py` compatibility shim preserves the common `doctor`, `list`, `show-config`, `run baseline|standard|deep|release`, and `verify-run` workflows.
-
-See [`docs/CONSOLIDATION.md`](docs/CONSOLIDATION.md).
+```bash
+kristaldiag verify-run /path/to/current/summary.json
+```
 
 ## Documentation
 
 - [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
 - [`docs/LEVELS.md`](docs/LEVELS.md)
 - [`docs/CONFORMANCE.md`](docs/CONFORMANCE.md)
-- [`docs/CONFIG_REFERENCE.md`](docs/CONFIG_REFERENCE.md)
-- [`docs/OPERATING_MODEL.md`](docs/OPERATING_MODEL.md)
 - [`docs/CI_INTEGRATION.md`](docs/CI_INTEGRATION.md)
 - [`docs/DRIVER.md`](docs/DRIVER.md)
-- [`docs/REPORTING.md`](docs/REPORTING.md)
 - [`docs/SECURITY.md`](docs/SECURITY.md)
-- [`docs/CONSOLIDATION.md`](docs/CONSOLIDATION.md)
+- [`docs/REPORTING.md`](docs/REPORTING.md)
+- [`docs/CONFIG_REFERENCE.md`](docs/CONFIG_REFERENCE.md)
+- [`docs/OPERATING_MODEL.md`](docs/OPERATING_MODEL.md)
+- [`docs/KNOWN_FINDINGS.md`](docs/KNOWN_FINDINGS.md)

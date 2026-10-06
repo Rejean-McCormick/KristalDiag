@@ -1,8 +1,10 @@
 {
   "schema": "kristaldiag.implementation.v1",
-  "name": "Example Kristal v7 implementation",
+  "name": "Example Kristal v9 implementation",
   "version": "0.1.0",
-  "claimed_profile": "V7-Projection",
-  "standard_target": "7.0.0-draft.2",
-  "notes": ["Declaration is informative until backed by KristalDiag evidence."]
+  "claimed_profile": "V9-Full",
+  "standard_target": "9.0.0-draft.1",
+  "notes": [
+    "Qualification only; no execution authority is granted."
+  ]
 }

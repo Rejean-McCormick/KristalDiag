@@ -1,33 +1,20 @@
 # Implementation driver
 
-Artifact validation is fully read-only. Runtime interoperability needs a narrow opt-in bridge.
-
-A target may provide `kristaldiag-driver.json`:
+Static artifact qualification is read-only. Executable implementation behavior uses a narrow opt-in bridge: `kristaldiag-driver.json`.
 
 ```json
 {
   "schema": "kristaldiag.driver.v1",
   "implementation": "My implementation",
-  "claimed_profile": "V7-Kristall",
+  "claimed_profile": "V9-Full",
   "actions": {
     "self_test": {"argv": ["python", "-m", "myimpl", "self-test"]}
   }
 }
 ```
 
-KristalDiag never invokes these actions unless `--allow-exec` is supplied. Commands are direct argv arrays; shell interpolation is not supported.
+KristalDiag never invokes driver actions unless `--allow-exec` is supplied. Commands are direct argv arrays, `shell=False`, with bounded timeouts.
 
-The driver boundary is designed to grow toward full A->B->A cross-implementation exchange tests without making arbitrary target execution the default.
+Allowed v9-oriented action names include `read_v9`, `commit_v9_artifact`, `commit_v9_state`, `validate_v9_derivation`, `validate_v9_materialization`, `publish_v9_state` and `activate_v9_state`. A target need not implement every action; profile qualification only uses executable actions where a check explicitly requests them.
 
-## Independent A -> B -> A interop
-
-Two implementations can be tested directly:
-
-```bash
-kristaldiag interop ./impl-a ./impl-b --allow-exec --output interop.json
-kristaldiag conform ./impl-a --profile V7-Kristall --interop-evidence interop.json
-```
-
-Both drivers must expose `interop_export` and `interop_import`. `interop_export` emits either a raw JSON artifact, `{ "artifact": {...} }`, or `{ "artifact_path": "..." }`. `interop_import` receives the artifact path through `KRISTALDIAG_INPUT`.
-
-KristalDiag validates both exported artifacts against the vendored v6/v7 schemas and requires the A->B->A round trip to preserve artifact type, schema version, and semantic identity.
+Historical actions and A→B→A interop remain supported.

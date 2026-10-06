@@ -18,7 +18,7 @@ jobs:
   self-test:
     name: Self-test Python ${{ matrix.python }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 10
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
@@ -44,17 +44,17 @@ jobs:
       - name: Unit tests
         run: python -m pytest -q
 
-      - name: Built-in reference self-test
+      - name: Built-in independent v9 self-test
         run: kristaldiag self-test
 
-  framework-v7-substrate:
-    name: Independent v7 substrate gate
+  framework-v9:
+    name: Independent Kristal v9 full gate
     needs: self-test
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 25
 
     env:
-      KRISTAL_FRAMEWORK_REF: "00a00e061dd216a9bcdb281cf1eeef80ce61410e"
+      KRISTAL_FRAMEWORK_REF: "main"
 
     steps:
       - name: Checkout KristalDiag
@@ -63,7 +63,7 @@ jobs:
           path: KristalDiag
           persist-credentials: false
 
-      - name: Checkout pinned Kristal Framework
+      - name: Checkout Kristal Framework
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: Rejean-McCormick/Kristal-Framework
@@ -93,37 +93,37 @@ jobs:
           } | tee ci-evidence/subjects.txt
 
       - name: KristalDiag doctor
-        run: kristaldiag doctor Kristal-Framework
+        run: kristaldiag doctor --target Kristal-Framework
 
-      - name: Qualify frozen v7 semantic substrate
+      - name: Qualify Kristal v9
         run: >-
           kristaldiag conform Kristal-Framework
-          --profile V7-Projection
-          --control-dir "$RUNNER_TEMP/kristaldiag-v7"
+          --profile V9-Full
+          --control-dir "$RUNNER_TEMP/kristaldiag-v9"
 
       - name: Verify evidence integrity
         if: always()
         run: |
-          if [ -f "$RUNNER_TEMP/kristaldiag-v7/current/summary.json" ]; then
-            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-v7/current/summary.json"
+          if [ -f "$RUNNER_TEMP/kristaldiag-v9/current/summary.json" ]; then
+            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-v9/current/summary.json"
           else
             echo "No KristalDiag summary was produced."
             exit 1
           fi
 
-      - name: Copy evidence for artifact upload
+      - name: Copy evidence
         if: always()
         run: |
-          mkdir -p ci-evidence/kristaldiag-v7
-          if [ -d "$RUNNER_TEMP/kristaldiag-v7/current" ]; then
-            cp -a "$RUNNER_TEMP/kristaldiag-v7/current/." ci-evidence/kristaldiag-v7/
+          mkdir -p ci-evidence/kristaldiag-v9
+          if [ -d "$RUNNER_TEMP/kristaldiag-v9/current" ]; then
+            cp -a "$RUNNER_TEMP/kristaldiag-v9/current/." ci-evidence/kristaldiag-v9/
           fi
 
       - name: Upload independent conformance evidence
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: kristaldiag-v7-substrate-${{ github.sha }}
+          name: kristaldiag-v9-${{ github.sha }}
           if-no-files-found: warn
           retention-days: 30
           path: ci-evidence/

@@ -1,36 +1,46 @@
 # Operating model
 
-## Diagnostic mode
+KristalDiag is normally used in three modes.
 
-Use campaigns when asking “is this repository healthy and well-formed?”
+## 1. Read-only diagnostics
 
 ```bash
 kristaldiag run baseline TARGET
-kristaldiag run standard TARGET
-kristaldiag run deep TARGET
-kristaldiag run release TARGET
+kristaldiag run v9 TARGET
 ```
 
-## Conformance mode
+No target command is executed.
 
-Use profiles when making a Kristal Standard claim:
+## 2. Semantic conformance
+
+Kristal v9:
+
+```bash
+kristaldiag conform TARGET --profile V9-State-Reader
+kristaldiag conform TARGET --profile V9-Builder
+kristaldiag conform TARGET --profile V9-Materializer
+kristaldiag conform TARGET --profile V9-Publisher
+kristaldiag conform TARGET --profile V9-Full
+```
+
+Historical v7 profiles remain available:
 
 ```bash
 kristaldiag conform TARGET --profile V7-Reader
 kristaldiag conform TARGET --profile V7-Mesh
 kristaldiag conform TARGET --profile V7-Projection
-kristaldiag conform TARGET --profile V7-Kristall --interop-evidence evidence.json
+kristaldiag conform TARGET --profile V7-Kristall
 ```
 
-A conformance verdict is evidence-bound and non-authoritative.
-
-## Triage mode
+## 3. Release audit
 
 ```bash
-kristaldiag triage-current TARGET
+kristaldiag run release TARGET
 kristaldiag verify-run TARGET/.kristaldiag/current/summary.json
 ```
 
-## Execution mode
+The release campaign is deliberately broader than a semantic profile: it adds documentation, reproducible snapshot, Git/release identity and vendored-contract checks.
 
-`--allow-exec` is a trust decision, not a convenience switch. Without it, N05 validators and implementation driver actions cannot run.
+## Exit posture
+
+`PASS` is success. `WARN`/`PARTIAL` signal usable but incomplete evidence. `BLOCKED`/`FAIL` are release-significant. `ERROR`/`INFRA_ERROR`/`CONFIG_ERROR` mean the diagnostic evidence itself cannot be trusted as a successful qualification.

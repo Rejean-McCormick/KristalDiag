@@ -2,6 +2,11 @@ name: KristalDiag Framework Release Audit
 
 on:
   workflow_dispatch:
+    inputs:
+      framework_ref:
+        description: "Kristal-Framework commit/tag/branch to audit"
+        required: true
+        default: "main"
 
 permissions:
   contents: read
@@ -10,10 +15,7 @@ jobs:
   release-audit:
     name: Independent Framework release audit
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
-
-    env:
-      KRISTAL_FRAMEWORK_REF: "00a00e061dd216a9bcdb281cf1eeef80ce61410e"
+    timeout-minutes: 35
 
     steps:
       - name: Checkout KristalDiag
@@ -22,11 +24,11 @@ jobs:
           path: KristalDiag
           persist-credentials: false
 
-      - name: Checkout pinned Kristal Framework
+      - name: Checkout selected Kristal Framework
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           repository: Rejean-McCormick/Kristal-Framework
-          ref: ${{ env.KRISTAL_FRAMEWORK_REF }}
+          ref: ${{ inputs.framework_ref }}
           path: Kristal-Framework
           fetch-depth: 0
           persist-credentials: false
@@ -42,7 +44,14 @@ jobs:
           python -m pip install -e KristalDiag
           python -m pip install -r Kristal-Framework/requirements-dev.txt
 
-      - name: Run independent release campaign
+      - name: Run independent V9-Full qualification
+        run: >-
+          kristaldiag conform Kristal-Framework
+          --profile V9-Full
+          --control-dir "$RUNNER_TEMP/kristaldiag-v9"
+
+      - name: Run broad independent release campaign
+        if: always()
         run: >-
           kristaldiag run release Kristal-Framework
           --control-dir "$RUNNER_TEMP/kristaldiag-release"
@@ -50,20 +59,18 @@ jobs:
       - name: Verify produced evidence
         if: always()
         run: |
-          if [ -f "$RUNNER_TEMP/kristaldiag-release/current/summary.json" ]; then
-            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-release/current/summary.json"
-          else
-            echo "No release-audit summary was produced."
-            exit 1
-          fi
+          for d in "$RUNNER_TEMP/kristaldiag-v9" "$RUNNER_TEMP/kristaldiag-release"; do
+            if [ -f "$d/current/summary.json" ]; then
+              kristaldiag verify-run "$d/current/summary.json"
+            fi
+          done
 
       - name: Prepare audit evidence
         if: always()
         run: |
-          mkdir -p ci-evidence/kristaldiag-release
-          if [ -d "$RUNNER_TEMP/kristaldiag-release/current" ]; then
-            cp -a "$RUNNER_TEMP/kristaldiag-release/current/." ci-evidence/kristaldiag-release/
-          fi
+          mkdir -p ci-evidence/v9 ci-evidence/release
+          [ ! -d "$RUNNER_TEMP/kristaldiag-v9/current" ] || cp -a "$RUNNER_TEMP/kristaldiag-v9/current/." ci-evidence/v9/
+          [ ! -d "$RUNNER_TEMP/kristaldiag-release/current" ] || cp -a "$RUNNER_TEMP/kristaldiag-release/current/." ci-evidence/release/
           {
             echo "KristalDiag=$(git -C KristalDiag rev-parse HEAD)"
             echo "Kristal-Framework=$(git -C Kristal-Framework rev-parse HEAD)"

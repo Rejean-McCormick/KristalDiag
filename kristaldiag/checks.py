@@ -45,6 +45,8 @@ def k00(ctx):
     fs.append(_f('K00-DISCOVERY-003','PASS',f'Discovered {len(inv.artifacts)} JSON objects across {len(kinds)} artifact types.',evidence=kinds))
     if inv.manifests:fs.append(_f('K00-KRISTALL-004','PASS',f'Discovered {len(inv.manifests)} Kristall manifest(s).',evidence=[a.rel for a in inv.manifests]))
     if inv.get('kristal_state'):fs.append(_f('K00-V6-005','PASS',f'Discovered {len(inv.get("kristal_state"))} portable v6 state(s).'))
+    v9_count=sum(len(inv.get(t)) for t in ('kristal_logical_artifact','kristal_state_snapshot','kristal_derivation','kristal_materialization_manifest','kristal_exchange','kristal_activation','kristal_v9_capabilities'))
+    if v9_count:fs.append(_f('K00-V9-007','PASS',f'Discovered {v9_count} Kristal v9 machine artifact(s).'))
     if inv.implementation_manifest:fs.append(_f('K00-IMPL-006','PASS','Discovered KristalDiag implementation declaration.',path=inv.implementation_manifest.rel))
     meta={'artifact_types':kinds,'is_standard_repo':inv.is_standard_repo,'claimed_profile':ctx.claimed_profile,'target_kind':ctx.target_kind}
     return _result('K00',fs,arts,meta,s)
@@ -66,7 +68,7 @@ def k01(ctx):
     if escaped:fs.append(_f('K01-SYMLINK-002','WARN','Symlinks escape the diagnostic root.',evidence=escaped,impact='External content is intentionally not traversed; repository shape may be incomplete.'))
     else:fs.append(_f('K01-SYMLINK-002','PASS','No escaping symlink was discovered.'))
     if ctx.inv.is_standard_repo:
-        expected=['README.md','contract-set.manifest.json','knowledge-model-contract.v3.json','schemas/kristal-state.schema.json','schemas/v7']
+        expected=['README.md','contracts/contract-set.json','contracts/v9-compatibility-lock.json','schemas/v6/kristal-state.schema.json','schemas/v7','schemas/v8','schemas/v9','tck/v9']
         missing=[x for x in expected if not (root/x).exists()]
         fs.append(_f('K01-STANDARD-003','FAIL' if missing else 'PASS','Kristal Standard repository surface '+('is incomplete.' if missing else 'is present.'),evidence={'missing':missing}))
     return _result('K01',fs,started=s)

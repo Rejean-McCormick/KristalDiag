@@ -1,60 +1,44 @@
 # Architecture
 
-KristalDiag v7 combines the external-harness model of LevelUpDiag with the normative v7 examiner built in KristalDiag.
+KristalDiag is an independent examiner. It is intentionally not linked into the Kristal Framework implementation.
 
 ```text
-CLI / compatibility shim
-        |
-        v
-campaign / profile selector
-        |
-        v
-manifest + dependency DAG
-        |
-        +---- bounded scheduler ----+
-        |                            |
-    fresh worker                 fresh worker
-    process N/K/R                process N/K/R
-        |                            |
-        +-------------+--------------+
-                      v
-               persisted evidence
-                      |
-                      v
-              K14 conformance gate
-                      |
-                      v
-       summary + report + evidence hashes
+             Kristal Framework / target
+                      │
+                untrusted input
+                      │
+                      ▼
+       discovery + JSON/schema validation
+                      │
+       ┌──────────────┴──────────────┐
+       ▼                             ▼
+ historical substrate          v9 examiner
+ K00–K13                      K15–K24
+                                     │
+                                     ├─ independent Python commitments
+                                     ├─ frozen compatibility baseline
+                                     ├─ polymorphic workloads
+                                     └─ adversarial corpus
+       └──────────────┬──────────────┘
+                      ▼
+                 K14 final gate
+                      │
+                      ▼
+             signed/hashable evidence
 ```
 
-## Dependency direction
+## Independent commitment implementation
 
-```text
-KristalDiag source/resources
-        ↓
-read-only target discovery
-        ↓
-N-level generic diagnostics
-        ↓
-K-level Kristal semantics
-        ↓
-optional R-level release evidence
-        ↓
-K14 qualification verdict
-```
+`kristaldiag/v9.py` implements the normative v9 logical projections, ordering, domain separators, JCS and SHA-256 in Python. It does not call `reference/js/src/v9/*` from the Framework. K16 compares the result with the normative golden vectors, while K23 checks invariants that are easy for two implementations to accidentally interpret differently.
 
-The harness is not an implementation of Kristal. When implementation execution is needed, it occurs only through explicit configured validators or `kristaldiag-driver.json` actions with `--allow-exec`.
+## Dual historical baselines
 
-## Process isolation
+The repo intentionally retains the older v6/v7 fixtures used by historical `V7-*` profiles. Separately, `kristaldiag/resources/baseline/9.0.0-draft.1/` is an exact copy of the inherited v6/v7/v8 substrate pinned by the v9 Standard. K24 uses that baseline for v9 compatibility qualification.
 
-N00–N06, K00–K13 and R00–R04 run in separate processes by default. The parent scheduler owns ordering, dependency blocking, timeouts, evidence collection, mutation detection and K14.
+## Isolation
 
-`parallel_safe=false` levels execute exclusively. Presentation order is not dependency semantics; `depends_on` is.
+Selected levels execute in fresh Python processes by default. Dependencies are explicit and independent levels can run concurrently. The parent process owns ordering, dependency blocking, timeouts, evidence collection, mutation detection and the K14 gate.
 
-## Evidence trust boundary
+## Authority boundary
 
-Vendored schemas/TCK resources are hashed by `contract-manifest.json`. Target files are untrusted input. Target Python/JS code is never imported. The target tree is content-fingerprinted before and after qualification.
-
-## Semantic versus release evidence
-
-V7 profiles depend on N + K levels only. R levels can block a release campaign without changing whether an artifact satisfies the semantic profile itself.
+Target JSON is data. Target source code is not imported. No discovered instruction can grant KristalDiag permission to execute or mutate the target. Execution is opt-in through a narrow driver or explicitly declared validator and `--allow-exec`.

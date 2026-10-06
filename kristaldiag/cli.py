@@ -11,7 +11,7 @@ from .verdicts import exit_code
 from .evidence import verify_run
 
 def parser():
-    p=argparse.ArgumentParser(prog='kristaldiag',description='Independent Kristal Standard v7 diagnostics and conformance harness')
+    p=argparse.ArgumentParser(prog='kristaldiag',description='Independent Kristal Standard v9 diagnostics and conformance harness')
     p.add_argument('--version',action='version',version=f'KristalDiag {VERSION} (target {STANDARD_TARGET})')
     sub=p.add_subparsers(dest='cmd',required=True)
     d=sub.add_parser('doctor');d.add_argument('--target',default='.')
@@ -44,7 +44,7 @@ def main(argv=None):
             print('scheduler: isolated-process / bounded-parallel')
             try:import jsonschema;print('jsonschema: OK')
             except Exception:print('jsonschema: MISSING');return 30
-            print(f'contracts/v7: {(contracts/"v7").is_dir()}');print(f'contracts/v6: {(contracts/"v6/kristal-state.schema.json").is_file()}')
+            print(f'contracts/v9: {(contracts/"v9").is_dir()}');print(f'contracts/v8: {(contracts/"v8").is_dir()}');print(f'contracts/v7: {(contracts/"v7").is_dir()}');print(f'contracts/v6: {(contracts/"v6/kristal-state.schema.json").is_file()}')
             from .utils import sha256_file
             try:
                 cm=read_json(resources/'contract-manifest.json');bad=[]
@@ -85,13 +85,16 @@ def main(argv=None):
         if a.cmd=='self-test':
             if a.standard_root:
                 target=Path(a.standard_root).resolve();cfg=load_config(repo,target,control_dir=target.parent/'.kristaldiag-selftest')
-                summary,code,current=run(target,cfg,profile='V7-Projection',repo_root=repo);print((current/'summary.txt').read_text());return code
+                summary,code,current=run(target,cfg,profile='V9-Full',repo_root=repo);print((current/'summary.txt').read_text());return code
             resources=Path(__file__).resolve().parent/'resources'
             with tempfile.TemporaryDirectory(prefix='kristaldiag-selftest-') as td:
-                base=Path(td);target=base/'reference-kristall';target.mkdir()
-                for q in sorted((resources/'tck'/'v7').glob('*.json')):shutil.copy2(q,target/q.name)
-                shutil.copy2(resources/'tck'/'v6'/'kristal-state.example.json',target/'kristal-state.example.json')
-                cfg=load_config(repo,target,control_dir=base/'evidence');summary,code,current=run(target,cfg,profile='V7-Projection',repo_root=repo)
+                base=Path(td);target=base/'reference-v9';target.mkdir()
+                # V9 vectors + polymorphic workloads form the target surface. Legacy vectors
+                # are qualified independently by K24 from the vendored examiner resources.
+                for q in sorted((resources/'tck'/'v9'/'vectors').glob('*.json')):
+                    if q.name!='logical-commitment-vectors.json':shutil.copy2(q,target/q.name)
+                for q in sorted((resources/'tck'/'v9'/'workloads').glob('*.json')):shutil.copy2(q,target/q.name)
+                cfg=load_config(repo,target,control_dir=base/'evidence');summary,code,current=run(target,cfg,profile='V9-Full',repo_root=repo)
                 print((current/'summary.txt').read_text());return code
     except Exception as e:
         print(f'KristalDiag error: {type(e).__name__}: {e}',file=sys.stderr);return 30

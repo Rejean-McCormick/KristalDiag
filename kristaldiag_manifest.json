@@ -1,289 +1,397 @@
 {
-  "schema": "kristaldiag.manifest.v2",
+  "schema": "kristaldiag.manifest.v3",
   "suite": "KristalDiag",
-  "suite_version": "0.7.0",
-  "kristal_standard_target": "7.0.0-draft.2",
+  "suite_version": "0.9.0",
+  "kristal_standard_target": "9.0.0-draft.1",
   "repository_mode": "external-target-harness",
   "control_dir_default": ".kristaldiag",
   "consolidates": [
     "levelupdiag_kristal@0.6.0",
-    "kristaldiag@0.2.0"
+    "kristaldiag@0.2.0",
+    "kristaldiag@0.7.0"
   ],
   "levels": [
     {
       "id": "N00",
       "name": "Diagnostic Integrity",
-      "category": "diagnostics",
       "depends_on": [],
       "parallel_safe": true,
-      "timeout_seconds": 60
+      "timeout_seconds": 60,
+      "category": "diagnostics"
     },
     {
       "id": "N01",
       "name": "Target Context",
-      "category": "context",
       "depends_on": [
         "N00"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 60
+      "timeout_seconds": 60,
+      "category": "context"
     },
     {
       "id": "N02",
       "name": "Repository Inventory",
-      "category": "inventory",
       "depends_on": [
         "N01"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "category": "inventory"
     },
     {
       "id": "N03",
       "name": "Repository Hygiene",
-      "category": "hygiene",
       "depends_on": [
         "N02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "hygiene"
     },
     {
       "id": "N04",
       "name": "Tooling Discovery",
-      "category": "tooling",
       "depends_on": [
         "N02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "category": "tooling"
     },
     {
       "id": "N05",
       "name": "Declared Validations",
-      "category": "validation",
       "depends_on": [
         "N01",
         "N02"
       ],
       "parallel_safe": false,
-      "timeout_seconds": 1800
+      "timeout_seconds": 1800,
+      "category": "validation"
     },
     {
       "id": "N06",
       "name": "Security Hygiene",
-      "category": "security_hygiene",
       "depends_on": [
         "N02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "security_hygiene"
     },
     {
       "id": "K00",
       "name": "Control & Discovery",
-      "category": "v7",
       "depends_on": [
         "N00",
         "N01",
         "N02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "category": "v7"
     },
     {
       "id": "K01",
       "name": "Repository & Static Integrity",
-      "category": "v7",
       "depends_on": [
         "K00",
         "N03"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "category": "v7"
     },
     {
       "id": "K02",
       "name": "Kristal State v6",
-      "category": "v6",
       "depends_on": [
         "K00"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v6"
     },
     {
       "id": "K03",
       "name": "Kristall v7 Metadata",
-      "category": "v7",
       "depends_on": [
         "K00"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K04",
       "name": "Canonicalization & Identity",
-      "category": "v7",
       "depends_on": [
         "K02",
         "K03"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K05",
       "name": "Assertion Families",
-      "category": "v7",
       "depends_on": [
         "K03"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K06",
       "name": "Mesh",
-      "category": "v7",
       "depends_on": [
         "K03",
         "K05"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K07",
       "name": "Axes & Subjects",
-      "category": "v7",
       "depends_on": [
         "K03"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K08",
       "name": "Surfaces & Projection Readiness",
-      "category": "v7",
       "depends_on": [
         "K06",
         "K07"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K09",
       "name": "Projection",
-      "category": "v7",
       "depends_on": [
         "K08",
         "K02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K10",
       "name": "Semantic Resonance",
-      "category": "v7",
       "depends_on": [
         "K06"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "v7"
     },
     {
       "id": "K11",
       "name": "Interoperability",
-      "category": "interop",
       "depends_on": [
         "K09"
       ],
       "parallel_safe": false,
-      "timeout_seconds": 300
+      "timeout_seconds": 300,
+      "category": "interop"
     },
     {
       "id": "K12",
       "name": "Determinism & Reproducibility",
-      "category": "reproducibility",
       "depends_on": [
         "K04"
       ],
       "parallel_safe": false,
-      "timeout_seconds": 300
+      "timeout_seconds": 300,
+      "category": "reproducibility"
     },
     {
       "id": "K13",
       "name": "Negative & Adversarial Corpus",
-      "category": "negative",
       "depends_on": [
         "K04"
       ],
       "parallel_safe": false,
-      "timeout_seconds": 300
+      "timeout_seconds": 300,
+      "category": "negative"
     },
     {
       "id": "K14",
       "name": "Conformance & Release Gate",
-      "category": "gate",
       "depends_on": [],
       "parallel_safe": false,
-      "timeout_seconds": 60
+      "timeout_seconds": 60,
+      "category": "gate"
+    },
+    {
+      "id": "K15",
+      "name": "V9 Machine Contracts",
+      "depends_on": [
+        "K00",
+        "K01"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v9"
+    },
+    {
+      "id": "K16",
+      "name": "V9 Independent Logical Commitments",
+      "depends_on": [
+        "K15"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 300,
+      "category": "v9"
+    },
+    {
+      "id": "K17",
+      "name": "V9 State Snapshot Semantics",
+      "depends_on": [
+        "K15",
+        "K16"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v9"
+    },
+    {
+      "id": "K18",
+      "name": "V9 Derivations & Reproducibility",
+      "depends_on": [
+        "K15",
+        "K16"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v9"
+    },
+    {
+      "id": "K19",
+      "name": "V9 Materialization Binding",
+      "depends_on": [
+        "K15",
+        "K16"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v9"
+    },
+    {
+      "id": "K20",
+      "name": "V9 Exchange Binding",
+      "depends_on": [
+        "K15",
+        "K17"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v9"
+    },
+    {
+      "id": "K21",
+      "name": "V9 Build / Publish / Activate",
+      "depends_on": [
+        "K15",
+        "K17"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 240,
+      "category": "v9"
+    },
+    {
+      "id": "K22",
+      "name": "V9 Polymorphism Workloads",
+      "depends_on": [
+        "K15",
+        "K16"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 240,
+      "category": "v9"
+    },
+    {
+      "id": "K23",
+      "name": "V9 Negative & Invariance Corpus",
+      "depends_on": [
+        "K16"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 240,
+      "category": "v9"
+    },
+    {
+      "id": "K24",
+      "name": "V9 Inherited Compatibility Substrate",
+      "depends_on": [
+        "K15"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 300,
+      "category": "compatibility"
     },
     {
       "id": "R00",
       "name": "Documentation & Link Integrity",
-      "category": "release",
       "depends_on": [
         "N02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 240
+      "timeout_seconds": 240,
+      "category": "release"
     },
     {
       "id": "R01",
       "name": "Snapshot & Manifest Reproducibility",
-      "category": "release",
       "depends_on": [
         "N02"
       ],
       "parallel_safe": false,
-      "timeout_seconds": 300
+      "timeout_seconds": 300,
+      "category": "release"
     },
     {
       "id": "R02",
       "name": "Git & Release Identity",
-      "category": "release",
       "depends_on": [
         "N01"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120
+      "timeout_seconds": 120,
+      "category": "release"
     },
     {
       "id": "R03",
       "name": "Signature & Trust Surface",
-      "category": "release",
       "depends_on": [
         "K02"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "release"
     },
     {
       "id": "R04",
       "name": "Contract / TCK / Profile Consistency",
-      "category": "release",
       "depends_on": [
         "N00",
         "K04"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180
+      "timeout_seconds": 180,
+      "category": "release"
     }
   ],
   "campaigns": {
@@ -331,7 +439,37 @@
       "K10",
       "K11",
       "K12",
-      "K13"
+      "K13",
+      "K15",
+      "K16",
+      "K17",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K22",
+      "K23",
+      "K24"
+    ],
+    "v9": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K22",
+      "K23",
+      "K24"
     ],
     "release": [
       "N00",
@@ -355,6 +493,16 @@
       "K11",
       "K12",
       "K13",
+      "K15",
+      "K16",
+      "K17",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K22",
+      "K23",
+      "K24",
       "R00",
       "R01",
       "R02",
@@ -438,6 +586,89 @@
       "K11",
       "K12",
       "K13"
+    ],
+    "V9-State-Reader": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23"
+    ],
+    "V9-Builder": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K18"
+    ],
+    "V9-Materializer": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K19"
+    ],
+    "V9-Publisher": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K21"
+    ],
+    "V9-Full": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K24"
     ]
   }
 }

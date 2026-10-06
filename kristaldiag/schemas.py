@@ -13,18 +13,43 @@ ARTIFACT_SCHEMAS={
  'kristall_assertion_family_registry':'kristall-assertion-family-registry.schema.json',
  'kristall_mesh':'kristall-mesh.schema.json',
  'kristall_axis_registry':'kristall-axis-registry.schema.json',
+ 'kristall_axis_type_registry':'kristall-axis-type-registry.schema.json',
  'kristall_projection_recipe':'kristall-projection-recipe.schema.json',
  'kristall_crystallization_record':'kristall-crystallization-record.schema.json',
+ 'kristall_kos_registry':'kristall-kos-registry.schema.json',
+ 'kristall_toc_registry':'kristall-toc-registry.schema.json',
  'semantic_resonance_set':'semantic-resonance.schema.json',
+}
+
+V8_SCHEMAS={
+ 'kristall_ai_context_bundle':'kristall-ai-context-bundle.schema.json',
+ 'kristall_lexicon_stack':'kristall-lexicon-stack.schema.json',
+ 'kristall_lexicon':'kristall-lexicon.schema.json',
+ 'kristall_query_index':'kristall-query-index.schema.json',
+ 'kristall_query_request':'kristall-query-request.schema.json',
+ 'kristall_query_result':'kristall-query-result.schema.json',
+ 'kristall_v8_capabilities':'kristall-v8-capabilities.schema.json',
+}
+
+V9_SCHEMAS={
+ 'kristal_activation':'kristal-activation.schema.json',
+ 'kristal_derivation':'kristal-derivation.schema.json',
+ 'kristal_exchange':'kristal-exchange.schema.json',
+ 'kristal_logical_artifact':'kristal-logical-artifact.schema.json',
+ 'kristal_materialization_manifest':'kristal-materialization-manifest.schema.json',
+ 'kristal_state_snapshot':'kristal-state-snapshot.schema.json',
+ 'kristal_v9_capabilities':'kristal-v9-capabilities.schema.json',
 }
 
 class SchemaStore:
     def __init__(self, repo_root:Path):
         self.root=repo_root
         packaged=Path(__file__).resolve().parent/'resources'/'contracts'
-        base=(repo_root/'contracts') if (repo_root/'contracts'/'v7').is_dir() else packaged
-        self.v7=base/'v7'
-        self.v6=base/'v6'
+        base=(repo_root/'contracts') if (repo_root/'contracts'/'v7').is_dir() and (repo_root/'contracts'/'v9').is_dir() else packaged
+        # Framework repositories keep normative machine schemas under schemas/, while
+        # KristalDiag vendors them under resources/contracts/. Prefer schemas/ when present.
+        schema_base=(repo_root/'schemas') if (repo_root/'schemas'/'v9').is_dir() else base
+        self.v6=schema_base/'v6'; self.v7=schema_base/'v7'; self.v8=schema_base/'v8'; self.v9=schema_base/'v9'
         self._cache={}
     def _load(self,p:Path):
         key=str(p)
@@ -34,6 +59,14 @@ class SchemaStore:
         typ=artifact.get('artifact_type'); fn=ARTIFACT_SCHEMAS.get(typ)
         if not fn:return False,[f'no v7 schema mapping for artifact_type={typ!r}']
         return self._validate(self._load(self.v7/fn),artifact)
+    def validate_v8(self,artifact:dict[str,Any]):
+        typ=artifact.get('artifact_type'); fn=V8_SCHEMAS.get(typ)
+        if not fn:return False,[f'no v8 schema mapping for artifact_type={typ!r}']
+        return self._validate(self._load(self.v8/fn),artifact)
+    def validate_v9(self,artifact:dict[str,Any]):
+        typ=artifact.get('artifact_type'); fn=V9_SCHEMAS.get(typ)
+        if not fn:return False,[f'no v9 schema mapping for artifact_type={typ!r}']
+        return self._validate(self._load(self.v9/fn),artifact)
     def validate_v6(self,artifact:dict[str,Any]):
         return self._validate(self._load(self.v6/'kristal-state.schema.json'),artifact)
     def validate_extension(self,ext:dict[str,Any]):

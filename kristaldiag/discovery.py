@@ -27,7 +27,7 @@ class Inventory:
 def discover(root:Path, *, max_files:int=10000)->Inventory:
     root=root.resolve(); inv=Inventory(root=root)
     scan_root=root if root.is_dir() else root.parent
-    inv.is_standard_repo=(scan_root/'schemas'/'v7').is_dir() and (scan_root/'schemas'/'kristal-state.schema.json').is_file()
+    inv.is_standard_repo=(scan_root/'schemas'/'v7').is_dir() and (scan_root/'schemas'/'v9').is_dir() and (scan_root/'schemas'/'v6'/'kristal-state.schema.json').is_file()
     scanned=0
     for p in json_files(root,max_files=max_files+1):
         scanned+=1

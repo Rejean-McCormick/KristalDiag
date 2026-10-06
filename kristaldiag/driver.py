@@ -2,7 +2,7 @@ from __future__ import annotations
 import json, os, subprocess, tempfile
 from pathlib import Path
 
-ALLOWED_ACTIONS={'self_test','read_v6','parse_v7','build_mesh','project_v6','crystallize','interop_export','interop_import'}
+ALLOWED_ACTIONS={'self_test','read_v6','parse_v7','build_mesh','project_v6','crystallize','read_v9','commit_v9_artifact','commit_v9_state','validate_v9_derivation','validate_v9_materialization','publish_v9_state','activate_v9_state','interop_export','interop_import'}
 
 def load_driver(target:Path):
     p=(target if target.is_dir() else target.parent)/'kristaldiag-driver.json'

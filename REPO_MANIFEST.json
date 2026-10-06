@@ -1,37 +1,37 @@
 {
   "schema": "kristaldiag.repo-manifest.v1",
   "name": "KristalDiag",
-  "version": "0.7.0",
-  "kristal_standard_target": "7.0.0-draft.2",
-  "file_count": 161,
+  "version": "0.9.0",
+  "kristal_standard_target": "9.0.0-draft.1",
+  "file_count": 293,
   "files": {
+    ".github/QUALIFICATION.md": {
+      "sha256": "7ae24529474f3f2646098384cfff182434610d74962670a966f98dd13c549101",
+      "size": 1967
+    },
     ".github/workflows/ci.yml": {
-      "sha256": "e23d958ea1aae6c1b79059f2ed539ec724348cad16357717989a0c21be24e627",
-      "size": 405
+      "sha256": "e45012d0b84a6596e7e99865cc3d7ad6c1cdf58dab08579a819ed3dbcdc61fa8",
+      "size": 3728
+    },
+    ".github/workflows/framework-release-audit.yml": {
+      "sha256": "a5ac9c368c03fb63ba5f239d6ee542a7f47334002fb83e0e88b9fa8571c2912e",
+      "size": 2984
     },
     ".gitignore": {
-      "sha256": "54ce1ae258cac25b0a841c9169dc3d55645e4f016c60e2985c7c6e578c4004c9",
-      "size": 144
-    },
-    "CHANGELOG.md": {
-      "sha256": "21b13afafe4723d1c200e1e9a87d4c7647ab40160c17f9c4c31bb088133a2072",
-      "size": 2037
+      "sha256": "0648a33c87f10eb6be0b2f9ae782486b499b36100210038acc9fe9bb1b9c23a1",
+      "size": 474
     },
     "README.md": {
-      "sha256": "f5d2e9bafccf2780181405c7fb0822db1fcaeb0b43ec7c6bdc0f324ce7693142",
-      "size": 5210
+      "sha256": "3c2e520e870e461d68d6fd4b3aa4cab6de24e68f69e8520911a457af8d77bfd3",
+      "size": 4209
     },
     "SECURITY.md": {
       "sha256": "82283e02849d8277f0b6cf0016bc50b85b8878886eb4f10b71e204659de8f4d5",
       "size": 629
     },
-    "VALIDATION_REPORT.md": {
-      "sha256": "1e951e2a698d53f41dab2cffb1133600034ea1b102caac4e5b8a9b65c23decad",
-      "size": 2582
-    },
     "contracts/contract-manifest.json": {
-      "sha256": "8dafc9fe9fa27adcd2e108aad565d00bba7bf2f88e9ec282aa816086b7885d43",
-      "size": 3405
+      "sha256": "76fb688eebb7ba29fed3c6c71bd061f842fce828eb2dc44c8ce04db0be82b74e",
+      "size": 15073
     },
     "contracts/v6/kristal-state.schema.json": {
       "sha256": "8f3df9a93d6a7c0ca8d7143946ed6f2009ae6d6b5105b8e7d7e873b5288e807c",
@@ -85,37 +85,101 @@
       "sha256": "f7840ff9522ce9b622b7c019d609036e39e9abef887c6a11f19267a1b468062b",
       "size": 3948
     },
+    "contracts/v8/kristall-ai-context-bundle.schema.json": {
+      "sha256": "4fbe1bb28bfeaba538e4d4f36e4db122e3afb54fe89208a0d684053ac09287b9",
+      "size": 8394
+    },
+    "contracts/v8/kristall-lexicon-stack.schema.json": {
+      "sha256": "fa1e8ab60ed1d24a96671df8ada71faa9c1c747a92b1db93dcffc3b63f78d771",
+      "size": 1920
+    },
+    "contracts/v8/kristall-lexicon.schema.json": {
+      "sha256": "c34321540dd3d366538d50509eadd010f014aa403fbf24699c5caa5c885f6ba0",
+      "size": 6738
+    },
+    "contracts/v8/kristall-query-index.schema.json": {
+      "sha256": "447218acd234036621524579c68e7974c93bec6b369618cd265f813abf383560",
+      "size": 2646
+    },
+    "contracts/v8/kristall-query-request.schema.json": {
+      "sha256": "a8788b19444e3769e395b361039e6a9f4aa4fc54fe5ff8e41be618a8f548cd78",
+      "size": 7235
+    },
+    "contracts/v8/kristall-query-result.schema.json": {
+      "sha256": "202414d6e63243663ec7bcce7f101c60c025c32d76e0d55a3226baff9e761692",
+      "size": 6513
+    },
+    "contracts/v8/kristall-v8-capabilities.schema.json": {
+      "sha256": "e10664794c4f7c429691b63309cf6914dd7e5345c33dd6b48fdedc8de7b829ea",
+      "size": 2572
+    },
+    "contracts/v9/README.md": {
+      "sha256": "4a5f9b65c9ab10bb8c9380ec83f4c0e5bd932dc8a0cf685e682b8b47e19b336b",
+      "size": 518
+    },
+    "contracts/v9/kristal-activation.schema.json": {
+      "sha256": "2b1408ea41915b950f8f42ba42857f0714af6336cacfbd55ee7ee71f2ec0b3a2",
+      "size": 3321
+    },
+    "contracts/v9/kristal-derivation.schema.json": {
+      "sha256": "31e61d872efa6aa4e90fa2233f25dc1784d0c755138cccfe5120ce6b7fc483b7",
+      "size": 5720
+    },
+    "contracts/v9/kristal-exchange.schema.json": {
+      "sha256": "c680c43ca84a7f41f4b1c9da2ed1fd83f0696f370c7790cb1892f3d0897913e3",
+      "size": 4312
+    },
+    "contracts/v9/kristal-logical-artifact.schema.json": {
+      "sha256": "3090790f1f9ac9d30db6a07284b21d4a157ca8e9c7357ac50a6130324a228079",
+      "size": 3005
+    },
+    "contracts/v9/kristal-materialization-manifest.schema.json": {
+      "sha256": "88c1f2981058e9779c60ee7773cfd20b9698d91030b5e5136ea3d605b01ee4fa",
+      "size": 5044
+    },
+    "contracts/v9/kristal-state-snapshot.schema.json": {
+      "sha256": "3572060b23e62708fd1bcd803f42a07268690ce3f2e181f32d2f6cfa8f6fd415",
+      "size": 6379
+    },
+    "contracts/v9/kristal-v9-capabilities.schema.json": {
+      "sha256": "cd769813abfaddd9694ab2db4e8b5f9a06061b30b25240c9e7e52d8d737b79d7",
+      "size": 3098
+    },
     "docs/ARCHITECTURE.md": {
-      "sha256": "b32932b4c8d1e14e738b124bdc53c72f9131e39397cde8f77f183addff36eea7",
-      "size": 1996
+      "sha256": "ba4a6e5c07805ab9f5fba16697392c37e8ae20453fa12815a9393010a2714e40",
+      "size": 2414
     },
     "docs/CI_INTEGRATION.md": {
-      "sha256": "fbc14a8f6ec759af82f1b95066cb06f4c9bc899f5430997c329da92bc84dd58b",
-      "size": 596
+      "sha256": "61cd2d24c6b08a773fbf49eb582aaf86f05f6f51460808328c4a994ef473de99",
+      "size": 1124
     },
     "docs/CONFIG_REFERENCE.md": {
       "sha256": "811535d873ac03c28784c1abaf7c24e3ec8bf11a29e39d7c4847fa46a634cceb",
       "size": 1277
     },
     "docs/CONFORMANCE.md": {
-      "sha256": "85799082ccd870053fe25f040425b041c30d6f1bdbbbfca385f3878424e64358",
-      "size": 1229
+      "sha256": "b7d9b5cadb9ad901265b9608cd123836463cb069068c3a778cf465ec9f4a9087",
+      "size": 2012
     },
     "docs/CONSOLIDATION.md": {
       "sha256": "fe5314182efeff42e6d3fbbe5d6a2017343f2b36fea79ff00d25b18069db0e5d",
       "size": 2315
     },
     "docs/DRIVER.md": {
-      "sha256": "d909393100e7d677d36291e57a91e9c533f00437747befaa12aedf114152767f",
-      "size": 1366
+      "sha256": "f6f7328a981ca60c205c5dc21c6f71fa34244045dc8e49db08865702dc87e92f",
+      "size": 909
+    },
+    "docs/KNOWN_FINDINGS.md": {
+      "sha256": "ac604ff44d98f2c1a126c106a683d850aa9255fe09034da73f3456c33495c3f8",
+      "size": 1129
     },
     "docs/LEVELS.md": {
-      "sha256": "ed8204e9787089c0a58b2a1f3537b84df694146a97354c74c64e8d84ac4004c5",
-      "size": 1822
+      "sha256": "244d1dca6718803c77f94be189ef711c6b459785b7d7474f485be9c3ceb9f523",
+      "size": 2659
     },
     "docs/OPERATING_MODEL.md": {
-      "sha256": "3f78a5816f1dbe356e8693b48e73de7aa6a98384fdfaa5f7e8fcae43e03b7bd1",
-      "size": 908
+      "sha256": "d3921788da81625466cfbdc0eaba50d32c08421b318b6c2b0c236c509df15916",
+      "size": 1300
     },
     "docs/REPORTING.md": {
       "sha256": "c51ce97e81072c7e054a988c01787e2ee5d3efaeee01288161f6f1eb0bfc71fd",
@@ -126,12 +190,12 @@
       "size": 872
     },
     "examples/kristaldiag-driver.example.json": {
-      "sha256": "6bc90ac30551778291b52ff37095eb5e20836b0bf4729df41bbcfa99ed98541d",
-      "size": 338
+      "sha256": "caabe1980b6b6851a9329cd95d7d1eb5376f9dd70b401af727f40fd0f65ca15a",
+      "size": 323
     },
     "examples/kristaldiag.implementation.example.json": {
-      "sha256": "2da096630517f28b5bc0ab2008d5d996fb1f5bc4110d092113285ce06dbd86d3",
-      "size": 274
+      "sha256": "3f028349e28e026203f946172b20fdbcf8e9a9d72cde4845ac6efe1091080517",
+      "size": 266
     },
     "examples/reference-kristall/assertion-family-registry.example.json": {
       "sha256": "43236c929160d9c66354653de0596e72a45f2ed673fe5c9a9c0a64ee4553f26c",
@@ -190,7 +254,7 @@
       "size": 81
     },
     "kristaldiag/__init__.py": {
-      "sha256": "676ddbcb009d2c9e0805fa1785715d016f14e4d0599fecbee69137742ab26b1a",
+      "sha256": "b2b672813af6668784735fe97ef9525b09ad2e58f23c1b8f5547093315876a04",
       "size": 184
     },
     "kristaldiag/__main__.py": {
@@ -198,12 +262,12 @@
       "size": 47
     },
     "kristaldiag/checks.py": {
-      "sha256": "ccd019a1a3e3ef97d2a5479a35d76982552fded733e25d548ecaed28dbcfa2ef",
-      "size": 26077
+      "sha256": "0a82d860cf93bbc372e683121d51d8e370779c234330312657a184108ca908b1",
+      "size": 26447
     },
     "kristaldiag/cli.py": {
-      "sha256": "6cc781144d639bef4c153f0e81bfdf13c8fb98752f9f0e44d07ede480ddf356c",
-      "size": 7611
+      "sha256": "cabb5400331ebd1f95b5639c5302c4988d5626bcfabd9b5af68811ac8e58b5d3",
+      "size": 7954
     },
     "kristaldiag/commands.py": {
       "sha256": "64e96971e4de95e022aade654c182e74c2f5f87c499d4826b4ae20f91ac909b8",
@@ -214,12 +278,12 @@
       "size": 1951
     },
     "kristaldiag/discovery.py": {
-      "sha256": "7671f45ac199ec53df208b40449e0cafedd27bfcbf3e006ea81295e552ec9d1f",
-      "size": 1915
+      "sha256": "e531ffa3dcaa3d108fea941e0d92960fc66169615c5d1d36a61d35cc56860209",
+      "size": 1960
     },
     "kristaldiag/driver.py": {
-      "sha256": "44bc56638604bcd34b34437aa71a0cb690d7afbd37db34708cf108548e4e40f0",
-      "size": 1552
+      "sha256": "1eb0101640ea4be0d5db25cab48976a0dff4e5aee8fd7831b7b294c312e5954b",
+      "size": 1695
     },
     "kristaldiag/evidence.py": {
       "sha256": "49cc75eff9a4b6e933e4f826b16ade3f12406cfebcf0096a73f871d8293f5536",
@@ -234,8 +298,8 @@
       "size": 2584
     },
     "kristaldiag/manifest.py": {
-      "sha256": "e398bf64d6e0e3b09be3a318eb4e9515a09c1266b10c89c012267544fb589ad2",
-      "size": 4372
+      "sha256": "e63b4b9c1ae5bc9bba67be3fc60e4a6c54e36019d08268f92d680459a709fdfa",
+      "size": 5924
     },
     "kristaldiag/models.py": {
       "sha256": "208c174ebca8bc7b7d68bd7cdcd273bb789fd2e0c7850e4de451b139c16831e9",
@@ -246,8 +310,8 @@
       "size": 13502
     },
     "kristaldiag/profiles.py": {
-      "sha256": "ff596efa56f5f469127a1d0ee80c0f39b363acf7b6a4436af16f7b931ef87459",
-      "size": 540
+      "sha256": "6883f1998f44fd2ce0bfee10bb89ec18a78f5a9efc1b589406eeb2f6fb844ce3",
+      "size": 906
     },
     "kristaldiag/release_checks.py": {
       "sha256": "8e40c5856f2e964a41639f9072252cb9a43f52a9c6cc49bd36e8f2faf25b3692",
@@ -257,9 +321,209 @@
       "sha256": "2a3f45a3083a3da4621dc6bce698fc2973bc883040ffb7dfd9e9b3a8a6bd2112",
       "size": 2478
     },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/contracts/v9-compatibility-lock.json": {
+      "sha256": "323b8cac928787baace8604a463914bbd46675d4107c303d8e8a89f7123dbebf",
+      "size": 28756
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v6/kristal-state.schema.json": {
+      "sha256": "8f3df9a93d6a7c0ca8d7143946ed6f2009ae6d6b5105b8e7d7e873b5288e807c",
+      "size": 8389
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristal-v7-extension.schema.json": {
+      "sha256": "fb8f008e9319d922edee4bc7fb93280f46880dd5619f6684810dc8da58cc4987",
+      "size": 998
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-assertion-family-registry.schema.json": {
+      "sha256": "5394ba95828447890ad186290dbe05360f11a26a92b2ff86ae6a80b383cf59b9",
+      "size": 1594
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-assertion-registry.schema.json": {
+      "sha256": "d8c560b5ea1f18149fdcc710693a52a0d65a2d49c419764f2d21892475bd50c6",
+      "size": 1355
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-axis-registry.schema.json": {
+      "sha256": "77726362c125bef7799e0ff74ec6219e4cb2c08897b426bf0ce0a16dfb9760db",
+      "size": 1718
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-axis-type-registry.schema.json": {
+      "sha256": "7ee29b36d816fdc1e771ac6ca065eea8ff6537b54d7bd4cf4cd2e3452e8eab52",
+      "size": 1784
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-crystallization-record.schema.json": {
+      "sha256": "b8a554fd034f1d15fe0e9f61b73725791c606c4c688f9b3f3eb414010793fdb1",
+      "size": 794
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-entity-registry.schema.json": {
+      "sha256": "b497203ffcd584d33c0fe3a63ed16a18c5c6811138278b91353e2e523429e2fe",
+      "size": 2126
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-kos-registry.schema.json": {
+      "sha256": "7b722e86ee24c174a5183abbf5464f7cb82bf54479867355d5a83ff67223de60",
+      "size": 2494
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-manifest.schema.json": {
+      "sha256": "53c5e87d82436c2f5b97522d9ede5f5cfc0898ed82f74b7af498fcc6864822fa",
+      "size": 2118
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-mesh.schema.json": {
+      "sha256": "f834cc6952f1933b5a8de912411059771a8b97f9d6af5bc53ebf4b5ba708a300",
+      "size": 1744
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-projection-recipe.schema.json": {
+      "sha256": "9ddaf302398c8d30e6c5487b624446c44ec7e97bfb800f660471cbbc7eb179a6",
+      "size": 1248
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-property-registry.schema.json": {
+      "sha256": "0de972ad8645764aaa56fd6152c41631f30775fdab835cdcc3604dd56de178d0",
+      "size": 1201
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-source-registry.schema.json": {
+      "sha256": "dc0d09a7797a533c01b75b451ad45d045b6f27da2f7a94896c2733227165d18a",
+      "size": 1096
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/kristall-toc-registry.schema.json": {
+      "sha256": "b52412f7c3268569c5c5e34eccb149c645336db435a6ab36603b13c109577f76",
+      "size": 4495
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v7/semantic-resonance.schema.json": {
+      "sha256": "e41154ba6561f276043d5e94cd4569d7339fb6b52c160d94c346e8362c18c617",
+      "size": 1702
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-ai-context-bundle.schema.json": {
+      "sha256": "4fbe1bb28bfeaba538e4d4f36e4db122e3afb54fe89208a0d684053ac09287b9",
+      "size": 8394
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-lexicon-stack.schema.json": {
+      "sha256": "fa1e8ab60ed1d24a96671df8ada71faa9c1c747a92b1db93dcffc3b63f78d771",
+      "size": 1920
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-lexicon.schema.json": {
+      "sha256": "c34321540dd3d366538d50509eadd010f014aa403fbf24699c5caa5c885f6ba0",
+      "size": 6738
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-query-index.schema.json": {
+      "sha256": "447218acd234036621524579c68e7974c93bec6b369618cd265f813abf383560",
+      "size": 2646
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-query-request.schema.json": {
+      "sha256": "a8788b19444e3769e395b361039e6a9f4aa4fc54fe5ff8e41be618a8f548cd78",
+      "size": 7235
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-query-result.schema.json": {
+      "sha256": "202414d6e63243663ec7bcce7f101c60c025c32d76e0d55a3226baff9e761692",
+      "size": 6513
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/schemas/v8/kristall-v8-capabilities.schema.json": {
+      "sha256": "e10664794c4f7c429691b63309cf6914dd7e5345c33dd6b48fdedc8de7b829ea",
+      "size": 2572
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v6/kristal-state.example.json": {
+      "sha256": "29d5f8193cd5751e03e40f5e3ff3bd6d66dd533307cb1543a94b7ab145f6c69f",
+      "size": 2234
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/100-kristals-seed-provenance.json": {
+      "sha256": "d053375e2643ecfc0f0ab9c14cf52d640cb7251788cb57e885da2d1b186ee495",
+      "size": 320
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/assertion-family-registry.example.json": {
+      "sha256": "d5856ddca0c2787f950b88ef53d9e431c2dc011b9e2089448e4717aeaaf1e2a1",
+      "size": 515
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/assertion-registry.example.json": {
+      "sha256": "2dd53396ead123ba5f73570c86922209e42b83d95d54c9cf93f5e14b6ddc6e2c",
+      "size": 397
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/axis-registry.example.json": {
+      "sha256": "e3f6aebe051b0001509dc3eb20b1fdabeddc982de785709b932a509af0bfea7d",
+      "size": 909
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/axis-type-registry.example.json": {
+      "sha256": "24759ef41e7e0699ee9d33954e5fb5d0e9b8d35617c2258ea991d4b0a03d5e57",
+      "size": 6479
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/crystallization-record.example.json": {
+      "sha256": "d7459c30cd9fc2f3e96ef34b8564fe611acbb5ca883eb2527dce3cfefa6c8319",
+      "size": 224
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/entity-registry.example.json": {
+      "sha256": "a3e118efc4f3c0c9fd22db0b379d5fd262187dc08e9491c1e2b33804e66ade67",
+      "size": 885
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/kos-registry.example.json": {
+      "sha256": "a86c3fe8d431aafffc9056411cb7eb86a5dfd874c5911d80006c0a935f796e22",
+      "size": 785
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/kristall-manifest.example.json": {
+      "sha256": "66e07544b2025acd5019b1e4700f8a5fcb19341f6b390e5586182a14b6bd1802",
+      "size": 1293
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/mesh.example.json": {
+      "sha256": "9dae6d1731136692f5e062385fd326b0f326500b0f285081ce16393b0b791ccf",
+      "size": 463
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/projection-recipe.example.json": {
+      "sha256": "27b00da098b48285341fc4895610dd1a32fb0a8e4e46920759defc242a1d6c25",
+      "size": 330
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/property-registry.example.json": {
+      "sha256": "2bb08f7cbbd8c694672419ce2e831313266b2d126b1e3b59d35bc05a80012ab9",
+      "size": 437
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/resonance.example.json": {
+      "sha256": "a8d67d9454749539e4b1f50530153808a195675ba2a94ede8d057f17b53b6636",
+      "size": 788
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/source-registry.example.json": {
+      "sha256": "f4d4a896b750e21fb22a62fec2aff8076f6967a045993407107d005db160162a",
+      "size": 265
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/toc-registry-100-seed.example.json": {
+      "sha256": "93929770f59c268ff3b1cf748af13ee5e6c45c4b4face59bbe5081bc38ee9c4c",
+      "size": 98204
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/toc-seed-100-analysis.json": {
+      "sha256": "d35648f91f37fc43786e4ff7dc144dedd741d95165669b6119f6cd179fb326cc",
+      "size": 4404
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v7/v6-compatible-projection.example.json": {
+      "sha256": "3cce44a20adbbef722da63bc86eea14d6f93d4aef52f2e6e41e7c64b900966dd",
+      "size": 2666
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/ai-context-bundle.example.json": {
+      "sha256": "2119f26f2ad563bcb45169be8e35d94a6d94e8ee5d699f2ef848e283c9b42b81",
+      "size": 2329
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/lexicon-fr-chemistry.example.json": {
+      "sha256": "daa92ca4a0ef03362278dd66ad7b22a91a7bdc5fbaaae0bbe1c6bbafdc48092d",
+      "size": 608
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/lexicon-fr-core.example.json": {
+      "sha256": "e57358517a5d2b91e5ba9ca0ac0f007c8f6337a43c67d2cd7adedb7f997472b3",
+      "size": 735
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/lexicon-stack.example.json": {
+      "sha256": "ab99b57cc0fd227d0861dc21a5d431c0c7b406a9cfa6e2fe990e4d81a46ea4aa",
+      "size": 509
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/query-index.example.json": {
+      "sha256": "88e9d8eda76d5b900737c11263ab330f065fd270ee996ab647aa0d2689f3006b",
+      "size": 656
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/query-request.example.json": {
+      "sha256": "e59e17f2e966bd4d847269fa11ade59f4f6bff9b44554855ffa6491ce5df2c99",
+      "size": 1180
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/query-result.example.json": {
+      "sha256": "eb7f386d1dbe8af9cb85c0aacdfbde6576e93c56ac922265825b65e48278edd5",
+      "size": 1424
+    },
+    "kristaldiag/resources/baseline/9.0.0-draft.1/tck/v8/v8-capabilities.example.json": {
+      "sha256": "ad9cc2f9cda9bfe20cb94d2d19c21f220305da92d5621ac799a4fbf60a59afce",
+      "size": 812
+    },
     "kristaldiag/resources/contract-manifest.json": {
-      "sha256": "8dafc9fe9fa27adcd2e108aad565d00bba7bf2f88e9ec282aa816086b7885d43",
-      "size": 3405
+      "sha256": "76fb688eebb7ba29fed3c6c71bd061f842fce828eb2dc44c8ce04db0be82b74e",
+      "size": 15073
     },
     "kristaldiag/resources/contracts/v6/kristal-state.schema.json": {
       "sha256": "8f3df9a93d6a7c0ca8d7143946ed6f2009ae6d6b5105b8e7d7e873b5288e807c",
@@ -312,6 +576,78 @@
     "kristaldiag/resources/contracts/v7/semantic-resonance.schema.json": {
       "sha256": "f7840ff9522ce9b622b7c019d609036e39e9abef887c6a11f19267a1b468062b",
       "size": 3948
+    },
+    "kristaldiag/resources/contracts/v8/kristall-ai-context-bundle.schema.json": {
+      "sha256": "4fbe1bb28bfeaba538e4d4f36e4db122e3afb54fe89208a0d684053ac09287b9",
+      "size": 8394
+    },
+    "kristaldiag/resources/contracts/v8/kristall-lexicon-stack.schema.json": {
+      "sha256": "fa1e8ab60ed1d24a96671df8ada71faa9c1c747a92b1db93dcffc3b63f78d771",
+      "size": 1920
+    },
+    "kristaldiag/resources/contracts/v8/kristall-lexicon.schema.json": {
+      "sha256": "c34321540dd3d366538d50509eadd010f014aa403fbf24699c5caa5c885f6ba0",
+      "size": 6738
+    },
+    "kristaldiag/resources/contracts/v8/kristall-query-index.schema.json": {
+      "sha256": "447218acd234036621524579c68e7974c93bec6b369618cd265f813abf383560",
+      "size": 2646
+    },
+    "kristaldiag/resources/contracts/v8/kristall-query-request.schema.json": {
+      "sha256": "a8788b19444e3769e395b361039e6a9f4aa4fc54fe5ff8e41be618a8f548cd78",
+      "size": 7235
+    },
+    "kristaldiag/resources/contracts/v8/kristall-query-result.schema.json": {
+      "sha256": "202414d6e63243663ec7bcce7f101c60c025c32d76e0d55a3226baff9e761692",
+      "size": 6513
+    },
+    "kristaldiag/resources/contracts/v8/kristall-v8-capabilities.schema.json": {
+      "sha256": "e10664794c4f7c429691b63309cf6914dd7e5345c33dd6b48fdedc8de7b829ea",
+      "size": 2572
+    },
+    "kristaldiag/resources/contracts/v9/README.md": {
+      "sha256": "4a5f9b65c9ab10bb8c9380ec83f4c0e5bd932dc8a0cf685e682b8b47e19b336b",
+      "size": 518
+    },
+    "kristaldiag/resources/contracts/v9/kristal-activation.schema.json": {
+      "sha256": "2b1408ea41915b950f8f42ba42857f0714af6336cacfbd55ee7ee71f2ec0b3a2",
+      "size": 3321
+    },
+    "kristaldiag/resources/contracts/v9/kristal-derivation.schema.json": {
+      "sha256": "31e61d872efa6aa4e90fa2233f25dc1784d0c755138cccfe5120ce6b7fc483b7",
+      "size": 5720
+    },
+    "kristaldiag/resources/contracts/v9/kristal-exchange.schema.json": {
+      "sha256": "c680c43ca84a7f41f4b1c9da2ed1fd83f0696f370c7790cb1892f3d0897913e3",
+      "size": 4312
+    },
+    "kristaldiag/resources/contracts/v9/kristal-logical-artifact.schema.json": {
+      "sha256": "3090790f1f9ac9d30db6a07284b21d4a157ca8e9c7357ac50a6130324a228079",
+      "size": 3005
+    },
+    "kristaldiag/resources/contracts/v9/kristal-materialization-manifest.schema.json": {
+      "sha256": "88c1f2981058e9779c60ee7773cfd20b9698d91030b5e5136ea3d605b01ee4fa",
+      "size": 5044
+    },
+    "kristaldiag/resources/contracts/v9/kristal-state-snapshot.schema.json": {
+      "sha256": "3572060b23e62708fd1bcd803f42a07268690ce3f2e181f32d2f6cfa8f6fd415",
+      "size": 6379
+    },
+    "kristaldiag/resources/contracts/v9/kristal-v9-capabilities.schema.json": {
+      "sha256": "cd769813abfaddd9694ab2db4e8b5f9a06061b30b25240c9e7e52d8d737b79d7",
+      "size": 3098
+    },
+    "kristaldiag/resources/locks/contract-set.json": {
+      "sha256": "96c872f4e8c0f004f6e4a262393375f84f2729c212def888dea00916271acbda",
+      "size": 3107
+    },
+    "kristaldiag/resources/locks/release.json": {
+      "sha256": "746fdaaf97e6d998805f4c8bfed75bec510e5c9f2601dbef4e0ebf69aad6095c",
+      "size": 1013
+    },
+    "kristaldiag/resources/locks/v9-compatibility-lock.json": {
+      "sha256": "323b8cac928787baace8604a463914bbd46675d4107c303d8e8a89f7123dbebf",
+      "size": 28756
     },
     "kristaldiag/resources/tck/jcs/expected-hashes.txt": {
       "sha256": "880bf0c233b7ff2a4635d385a4069e998b75928295393addea95a34ec64aa858",
@@ -373,33 +709,129 @@
       "sha256": "aee4f2b1a42f51579b64aca70d157b2b9bb4899a96dfafbe132ef4c887a574fe",
       "size": 1498
     },
+    "kristaldiag/resources/tck/v8/ai-context-bundle.example.json": {
+      "sha256": "2119f26f2ad563bcb45169be8e35d94a6d94e8ee5d699f2ef848e283c9b42b81",
+      "size": 2329
+    },
+    "kristaldiag/resources/tck/v8/lexicon-fr-chemistry.example.json": {
+      "sha256": "daa92ca4a0ef03362278dd66ad7b22a91a7bdc5fbaaae0bbe1c6bbafdc48092d",
+      "size": 608
+    },
+    "kristaldiag/resources/tck/v8/lexicon-fr-core.example.json": {
+      "sha256": "e57358517a5d2b91e5ba9ca0ac0f007c8f6337a43c67d2cd7adedb7f997472b3",
+      "size": 735
+    },
+    "kristaldiag/resources/tck/v8/lexicon-stack.example.json": {
+      "sha256": "ab99b57cc0fd227d0861dc21a5d431c0c7b406a9cfa6e2fe990e4d81a46ea4aa",
+      "size": 509
+    },
+    "kristaldiag/resources/tck/v8/query-index.example.json": {
+      "sha256": "88e9d8eda76d5b900737c11263ab330f065fd270ee996ab647aa0d2689f3006b",
+      "size": 656
+    },
+    "kristaldiag/resources/tck/v8/query-request.example.json": {
+      "sha256": "e59e17f2e966bd4d847269fa11ade59f4f6bff9b44554855ffa6491ce5df2c99",
+      "size": 1180
+    },
+    "kristaldiag/resources/tck/v8/query-result.example.json": {
+      "sha256": "eb7f386d1dbe8af9cb85c0aacdfbde6576e93c56ac922265825b65e48278edd5",
+      "size": 1424
+    },
+    "kristaldiag/resources/tck/v8/v8-capabilities.example.json": {
+      "sha256": "ad9cc2f9cda9bfe20cb94d2d19c21f220305da92d5621ac799a4fbf60a59afce",
+      "size": 812
+    },
+    "kristaldiag/resources/tck/v9/vectors/activation.example.json": {
+      "sha256": "48d196606e31e365a7b346e32145afa6c6639a7527d281afc7fd535c6e4ccd39",
+      "size": 440
+    },
+    "kristaldiag/resources/tck/v9/vectors/derivation.example.json": {
+      "sha256": "533a81a8939602775b34b290441fdf9c2da2c8f85142825f85bd5d70d569a750",
+      "size": 929
+    },
+    "kristaldiag/resources/tck/v9/vectors/exchange.example.json": {
+      "sha256": "b5fc75b03d5f45ad194b6310bade16888863a19e4886fc7b592324faec799851",
+      "size": 883
+    },
+    "kristaldiag/resources/tck/v9/vectors/logical-artifact.example.json": {
+      "sha256": "b36924ea05a3131cdad0ed5e25409a3740027febb1ca4251b903b7324c57ebf4",
+      "size": 705
+    },
+    "kristaldiag/resources/tck/v9/vectors/logical-commitment-vectors.json": {
+      "sha256": "f59b2a6b7b7ecf988ceb492c6b449639ab8545655a23d3c498963c941b2663d5",
+      "size": 589
+    },
+    "kristaldiag/resources/tck/v9/vectors/materialization-manifest.example.json": {
+      "sha256": "1df94bd61e1ce2cc62cafffa5aaf2c5272e3762165745ee89d5ad0621f9f1e2c",
+      "size": 1078
+    },
+    "kristaldiag/resources/tck/v9/vectors/state-snapshot.example.json": {
+      "sha256": "b2e3f0379ee761490d622e15a28dd2d2ecf6ad4eac13e86d148405d72e888677",
+      "size": 910
+    },
+    "kristaldiag/resources/tck/v9/vectors/v9-capabilities.example.json": {
+      "sha256": "549e0b846e79ad443f28f38f1ab3f1e47227443c0429618251f4541b1a17f92c",
+      "size": 977
+    },
+    "kristaldiag/resources/tck/v9/workloads/epistemic-corpus.logical-artifact.json": {
+      "sha256": "fc19ef3edb976707d5d5856fc40483377d2f46d74b1bf533330dc13796cfd891",
+      "size": 797
+    },
+    "kristaldiag/resources/tck/v9/workloads/federation.state-snapshot.json": {
+      "sha256": "df27cfab1e3137f8350b025527b4cda6af891e2b1f1166f58ee49f79c1bc7779",
+      "size": 1049
+    },
+    "kristaldiag/resources/tck/v9/workloads/formula-ast.logical-artifact.json": {
+      "sha256": "d4c2e33a7c1d5d9f8e19296f859c99907344cc0969e322bfbf60421896a0b73e",
+      "size": 694
+    },
+    "kristaldiag/resources/tck/v9/workloads/multiplex-graph.logical-artifact.json": {
+      "sha256": "3f9febd809a3c14dad38fcfa22989e535678f353152c82e5d6cfa1dccecd0eb7",
+      "size": 891
+    },
+    "kristaldiag/resources/tck/v9/workloads/procedure-dag.logical-artifact.json": {
+      "sha256": "8bc4b645eeb76fc3ec7108e079c97c1572247d88da0f3799c32acf85cef8aa56",
+      "size": 827
+    },
+    "kristaldiag/resources/tck/v9/workloads/relation.logical-artifact.json": {
+      "sha256": "7566a915448c057ea8321aab2ccb49446472ea1ccb57dec1e89e5de7ece7bfa6",
+      "size": 799
+    },
     "kristaldiag/runner.py": {
       "sha256": "e9922c3da6d600dcac73eb277a1510d43d6e5c1b00a0c226275939107e43c2dc",
       "size": 12506
     },
     "kristaldiag/runner_types.py": {
-      "sha256": "99314933ad648cfb7ec0eed942d518c32b02c3a71e1dd821a90e1133d20bc877",
-      "size": 904
+      "sha256": "c95dde6ea56c3429c86cc8c174371faa9f1d5712e2019a80702c37ed9a43d507",
+      "size": 1318
     },
     "kristaldiag/schemas.py": {
-      "sha256": "757b411fe94e8b7309fc2e9c1bd14ac1cbe37f18680441e04400248e916f489d",
-      "size": 2372
+      "sha256": "1e4857479fd84d149cfa297853c00d8bfad18a7ecbcef8297a64f14d6be46c85",
+      "size": 4385
     },
     "kristaldiag/utils.py": {
       "sha256": "3d67229e3e55915d6b9ce1c298ad72e519f4b8175753d840508719039c53ba1d",
       "size": 3331
+    },
+    "kristaldiag/v9.py": {
+      "sha256": "387d7ce35cf8bd0f9a03e754a572e220482257e13feff4d53f42d6411acc4992",
+      "size": 5588
+    },
+    "kristaldiag/v9_checks.py": {
+      "sha256": "498440cac0a4fc167a0f0164f587dee0d138e71484ed1532a0b73ae165abeef6",
+      "size": 27391
     },
     "kristaldiag/verdicts.py": {
       "sha256": "41851cf33293856f479b796db7525d484601f79de360b7f2dedd43e4f0c574d1",
       "size": 554
     },
     "kristaldiag/worker.py": {
-      "sha256": "79793ac8638264245fcbb9a15d2454dbe2ba5ecd8a1923436ecea465e4b55d44",
-      "size": 2764
+      "sha256": "1c979d6eac22d7f423cf05ae29bcbde8eaac7a29b1c8e4d16bb918c4ba31b077",
+      "size": 2809
     },
     "kristaldiag_manifest.json": {
-      "sha256": "31e2915f2d6e8b49292a00d5dba7985b7b37722a0c5ac6cb0ab521ca08927ba2",
-      "size": 7869
+      "sha256": "a070ede97a87fdc38e49d8a6234e2b4a6440465a13bf18ed23ace24c73dadb32",
+      "size": 11664
     },
     "levels/__init__.py": {
       "sha256": "1504c5950e8e1126f49c2e572b1e8978eeefdfcd31719336bc062bff242a4543",
@@ -514,7 +946,7 @@
       "size": 2061
     },
     "pyproject.toml": {
-      "sha256": "a1f2906a8f437a7ce176455c0d35c4fe94f30fdb89f1fd0206520fd9d2d7008b",
+      "sha256": "236edfb0694405c31374f37182d931d9fb2c87cdc658e7ee1d50ddcd1327540a",
       "size": 812
     },
     "schemas/conformance-verdict.schema.json": {
@@ -522,24 +954,28 @@
       "size": 1126
     },
     "schemas/driver.schema.json": {
-      "sha256": "d862909f084606df348ab5f5225e692277b6f8f3bc7921313e0cc7b1e03c6f84",
-      "size": 751
+      "sha256": "b9ff7c0d51aa4bedb7de88e6c5df613ab7d433961c51bbd31956501bf907e4d1",
+      "size": 1238
     },
     "schemas/implementation.schema.json": {
-      "sha256": "6ef018b454b75d67b7bbb590fc9269c492e1feceb073c4ec282b7262aa1eb0a9",
-      "size": 642
+      "sha256": "1b3801f2da1f64670047c6c96c009a0528c81f7f18c561acf396efc40399ab4e",
+      "size": 951
     },
     "schemas/interop-evidence.schema.json": {
       "sha256": "4cab21b7601b60db5892324844d75f524c146a05c10c4951b8bf417c4577c1bb",
       "size": 519
     },
     "schemas/level-result.schema.json": {
-      "sha256": "396405d5ffa28489ff301a8c464d7b0fe1f92305b9359e128394781e795be6fe",
-      "size": 1626
+      "sha256": "824bdee5c9a8f12d07a6f9fabf31f18bc0548287f081e9b73ab02370c73fb80f",
+      "size": 1633
     },
     "schemas/summary.schema.json": {
       "sha256": "a05ce51388ac645a47c1601db38a1bf59049e41edded525dc7129e0888a41882",
       "size": 930
+    },
+    "scripts/build_release.py": {
+      "sha256": "43b1427a3bb81bd0633c0234c536f16a1223d33d30ae3a249df34dd545ab541d",
+      "size": 2391
     },
     "scripts/check_docs_links.py": {
       "sha256": "c79d853de71e1f0d954920cefede20a5187eab20261cd6728c73bb071c9805be",
@@ -550,12 +986,12 @@
       "size": 1020
     },
     "scripts/release_check.py": {
-      "sha256": "bf247e45f96a5082b9c3aca5a8e12c4d2a606e2774effa40ba3b18c8637d23d5",
-      "size": 876
+      "sha256": "b2552d1456bd4847c5be49ee956ab6dfb81ddeb1adf8c5982071dd6bab15938f",
+      "size": 896
     },
     "scripts/verify_contract_mirrors.py": {
-      "sha256": "22ffc7b5f9575f99c34f76768a16d24e8e4ab37630e10dc68ae3e04dac826e7f",
-      "size": 642
+      "sha256": "61726adeeaf72046335daea3df29fbc6711bd815db6f7953aa961d08fe086722",
+      "size": 846
     },
     "tck/jcs/expected-hashes.txt": {
       "sha256": "880bf0c233b7ff2a4635d385a4069e998b75928295393addea95a34ec64aa858",
@@ -617,6 +1053,94 @@
       "sha256": "aee4f2b1a42f51579b64aca70d157b2b9bb4899a96dfafbe132ef4c887a574fe",
       "size": 1498
     },
+    "tck/v8/ai-context-bundle.example.json": {
+      "sha256": "2119f26f2ad563bcb45169be8e35d94a6d94e8ee5d699f2ef848e283c9b42b81",
+      "size": 2329
+    },
+    "tck/v8/lexicon-fr-chemistry.example.json": {
+      "sha256": "daa92ca4a0ef03362278dd66ad7b22a91a7bdc5fbaaae0bbe1c6bbafdc48092d",
+      "size": 608
+    },
+    "tck/v8/lexicon-fr-core.example.json": {
+      "sha256": "e57358517a5d2b91e5ba9ca0ac0f007c8f6337a43c67d2cd7adedb7f997472b3",
+      "size": 735
+    },
+    "tck/v8/lexicon-stack.example.json": {
+      "sha256": "ab99b57cc0fd227d0861dc21a5d431c0c7b406a9cfa6e2fe990e4d81a46ea4aa",
+      "size": 509
+    },
+    "tck/v8/query-index.example.json": {
+      "sha256": "88e9d8eda76d5b900737c11263ab330f065fd270ee996ab647aa0d2689f3006b",
+      "size": 656
+    },
+    "tck/v8/query-request.example.json": {
+      "sha256": "e59e17f2e966bd4d847269fa11ade59f4f6bff9b44554855ffa6491ce5df2c99",
+      "size": 1180
+    },
+    "tck/v8/query-result.example.json": {
+      "sha256": "eb7f386d1dbe8af9cb85c0aacdfbde6576e93c56ac922265825b65e48278edd5",
+      "size": 1424
+    },
+    "tck/v8/v8-capabilities.example.json": {
+      "sha256": "ad9cc2f9cda9bfe20cb94d2d19c21f220305da92d5621ac799a4fbf60a59afce",
+      "size": 812
+    },
+    "tck/v9/vectors/activation.example.json": {
+      "sha256": "48d196606e31e365a7b346e32145afa6c6639a7527d281afc7fd535c6e4ccd39",
+      "size": 440
+    },
+    "tck/v9/vectors/derivation.example.json": {
+      "sha256": "533a81a8939602775b34b290441fdf9c2da2c8f85142825f85bd5d70d569a750",
+      "size": 929
+    },
+    "tck/v9/vectors/exchange.example.json": {
+      "sha256": "b5fc75b03d5f45ad194b6310bade16888863a19e4886fc7b592324faec799851",
+      "size": 883
+    },
+    "tck/v9/vectors/logical-artifact.example.json": {
+      "sha256": "b36924ea05a3131cdad0ed5e25409a3740027febb1ca4251b903b7324c57ebf4",
+      "size": 705
+    },
+    "tck/v9/vectors/logical-commitment-vectors.json": {
+      "sha256": "f59b2a6b7b7ecf988ceb492c6b449639ab8545655a23d3c498963c941b2663d5",
+      "size": 589
+    },
+    "tck/v9/vectors/materialization-manifest.example.json": {
+      "sha256": "1df94bd61e1ce2cc62cafffa5aaf2c5272e3762165745ee89d5ad0621f9f1e2c",
+      "size": 1078
+    },
+    "tck/v9/vectors/state-snapshot.example.json": {
+      "sha256": "b2e3f0379ee761490d622e15a28dd2d2ecf6ad4eac13e86d148405d72e888677",
+      "size": 910
+    },
+    "tck/v9/vectors/v9-capabilities.example.json": {
+      "sha256": "549e0b846e79ad443f28f38f1ab3f1e47227443c0429618251f4541b1a17f92c",
+      "size": 977
+    },
+    "tck/v9/workloads/epistemic-corpus.logical-artifact.json": {
+      "sha256": "fc19ef3edb976707d5d5856fc40483377d2f46d74b1bf533330dc13796cfd891",
+      "size": 797
+    },
+    "tck/v9/workloads/federation.state-snapshot.json": {
+      "sha256": "df27cfab1e3137f8350b025527b4cda6af891e2b1f1166f58ee49f79c1bc7779",
+      "size": 1049
+    },
+    "tck/v9/workloads/formula-ast.logical-artifact.json": {
+      "sha256": "d4c2e33a7c1d5d9f8e19296f859c99907344cc0969e322bfbf60421896a0b73e",
+      "size": 694
+    },
+    "tck/v9/workloads/multiplex-graph.logical-artifact.json": {
+      "sha256": "3f9febd809a3c14dad38fcfa22989e535678f353152c82e5d6cfa1dccecd0eb7",
+      "size": 891
+    },
+    "tck/v9/workloads/procedure-dag.logical-artifact.json": {
+      "sha256": "8bc4b645eeb76fc3ec7108e079c97c1572247d88da0f3799c32acf85cef8aa56",
+      "size": 827
+    },
+    "tck/v9/workloads/relation.logical-artifact.json": {
+      "sha256": "7566a915448c057ea8321aab2ccb49446472ea1ccb57dec1e89e5de7ece7bfa6",
+      "size": 799
+    },
     "tests/conftest.py": {
       "sha256": "00b7701b25e4a779e2d4f3ac5910adc1e7dbd351b4f0d8a6c9451ce98d10e413",
       "size": 349
@@ -648,6 +1172,10 @@
     "tests/test_schemas.py": {
       "sha256": "696d43903c19914433820cba0fb743508fb012aaa2a2bc6845ac36148b8cf669",
       "size": 1374
+    },
+    "tests/test_v9.py": {
+      "sha256": "fef4e76862590bb24dd3acfa0de9582a376ca7a389faeb21755d5ea87cdb0828",
+      "size": 3988
     }
   }
 }
