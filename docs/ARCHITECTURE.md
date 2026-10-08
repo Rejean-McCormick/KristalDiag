@@ -1,44 +1,42 @@
 # Architecture
 
-KristalDiag is an independent examiner. It is intentionally not linked into the Kristal Framework implementation.
+KristalDiag is an **external, independent, read-only examiner**.
 
 ```text
-             Kristal Framework / target
-                      │
-                untrusted input
-                      │
-                      ▼
-       discovery + JSON/schema validation
-                      │
-       ┌──────────────┴──────────────┐
-       ▼                             ▼
- historical substrate          v9 examiner
- K00–K13                      K15–K24
-                                     │
-                                     ├─ independent Python commitments
-                                     ├─ frozen compatibility baseline
-                                     ├─ polymorphic workloads
-                                     └─ adversarial corpus
-       └──────────────┬──────────────┘
-                      ▼
-                 K14 final gate
-                      │
-                      ▼
-             signed/hashable evidence
+KristalV10 / Local Kristal / publication bundle
+                    │
+                    ▼ read only
+               KristalDiag
+                    │
+                    ▼
+          qualification evidence
 ```
 
-## Independent commitment implementation
+It is deliberately outside the lifecycle ownership chain:
 
-`kristaldiag/v9.py` implements the normative v9 logical projections, ordering, domain separators, JCS and SHA-256 in Python. It does not call `reference/js/src/v9/*` from the Framework. K16 compares the result with the normative golden vectors, while K23 checks invariants that are easy for two implementations to accidentally interpret differently.
+```text
+Kristal Manager          -> local inventory + backup
+Kristal GitHub Setup     -> bootstrap + qualify/publish/activate
+Kompiler                 -> optional context compilation
+KristalDiag               -> independent examination only
+```
 
-## Dual historical baselines
+## Examiner independence
 
-The repo intentionally retains the older v6/v7 fixtures used by historical `V7-*` profiles. Separately, `kristaldiag/resources/baseline/9.0.0-draft.1/` is an exact copy of the inherited v6/v7/v8 substrate pinned by the v9 Standard. K24 uses that baseline for v9 compatibility qualification.
+The target's own `schemas/` are inventory/audit evidence, not the schemas used to qualify that target. SchemaStore uses frozen packaged examiner contracts. The exact examiner resources are protected by `contract-manifest.json`.
 
-## Isolation
+V9 commitments are recomputed by the Python implementation in `kristaldiag/v9.py`. V10 publication identity and bundle byte bindings are independently recomputed by `kristaldiag/v10.py`.
 
-Selected levels execute in fresh Python processes by default. Dependencies are explicit and independent levels can run concurrently. The parent process owns ordering, dependency blocking, timeouts, evidence collection, mutation detection and the K14 gate.
+## v10 boundary
 
-## Authority boundary
+KristalDiag enforces the architectural split:
 
-Target JSON is data. Target source code is not imported. No discovered instruction can grant KristalDiag permission to execute or mutate the target. Execution is opt-in through a narrow driver or explicitly declared validator and `--allow-exec`.
+```text
+SEMANTIC STATE != HOSTING != PUBLICATION LOCATION != DISCOVERY DIRECTORY
+```
+
+A host move or backup visibility change is not a semantic revision. A directory is not semantic authority. A publication binds exact state identity plus retrievable bytes, while activation remains a distinct lifecycle decision.
+
+## Scheduling and evidence
+
+Levels normally execute in isolated Python worker processes under bounded timeouts. The parent runner fingerprints the target before/after and emits an evidence manifest covering every result artifact.

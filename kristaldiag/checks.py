@@ -47,6 +47,8 @@ def k00(ctx):
     if inv.get('kristal_state'):fs.append(_f('K00-V6-005','PASS',f'Discovered {len(inv.get("kristal_state"))} portable v6 state(s).'))
     v9_count=sum(len(inv.get(t)) for t in ('kristal_logical_artifact','kristal_state_snapshot','kristal_derivation','kristal_materialization_manifest','kristal_exchange','kristal_activation','kristal_v9_capabilities'))
     if v9_count:fs.append(_f('K00-V9-007','PASS',f'Discovered {v9_count} Kristal v9 machine artifact(s).'))
+    v10_count=sum(len(inv.get(t)) for t in ('kristal_node_manifest','kristal_host_binding','kristal_publication','kristal_directory','kristal_v10_capabilities'))
+    if v10_count:fs.append(_f('K00-V10-008','PASS',f'Discovered {v10_count} Kristal v10 hosted-network artifact(s).'))
     if inv.implementation_manifest:fs.append(_f('K00-IMPL-006','PASS','Discovered KristalDiag implementation declaration.',path=inv.implementation_manifest.rel))
     meta={'artifact_types':kinds,'is_standard_repo':inv.is_standard_repo,'claimed_profile':ctx.claimed_profile,'target_kind':ctx.target_kind}
     return _result('K00',fs,arts,meta,s)

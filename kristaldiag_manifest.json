@@ -1,14 +1,19 @@
 {
-  "schema": "kristaldiag.manifest.v3",
+  "schema": "kristaldiag.manifest.v4",
   "suite": "KristalDiag",
-  "suite_version": "0.9.0",
-  "kristal_standard_target": "9.0.0-draft.1",
+  "suite_version": "1.0.0-alpha.1",
+  "kristal_standard_target": "10.0.0-draft.2",
+  "framework_pin": {
+    "repository": "Rejean-McCormick/KristalV10",
+    "commit": "27c0c7db3d79a4597c1c964fe8281fa35b5f858a"
+  },
   "repository_mode": "external-target-harness",
   "control_dir_default": ".kristaldiag",
   "consolidates": [
     "levelupdiag_kristal@0.6.0",
     "kristaldiag@0.2.0",
-    "kristaldiag@0.7.0"
+    "kristaldiag@0.7.0",
+    "kristaldiag@0.9.0"
   ],
   "levels": [
     {
@@ -343,6 +348,90 @@
       "category": "compatibility"
     },
     {
+      "id": "K25",
+      "name": "V10 Machine Contracts & Capabilities",
+      "depends_on": [
+        "K00",
+        "K01"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v10"
+    },
+    {
+      "id": "K26",
+      "name": "V10 Node / Binding Relations",
+      "depends_on": [
+        "K25"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v10"
+    },
+    {
+      "id": "K27",
+      "name": "V10 Publication Bundle Integrity",
+      "depends_on": [
+        "K25",
+        "K26"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 300,
+      "category": "v10"
+    },
+    {
+      "id": "K28",
+      "name": "V10 Directory & Discovery Semantics",
+      "depends_on": [
+        "K25",
+        "K26"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v10"
+    },
+    {
+      "id": "K29",
+      "name": "V10 GitHub Host Profile",
+      "depends_on": [
+        "K25",
+        "K26"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "v10"
+    },
+    {
+      "id": "K30",
+      "name": "V10 Semantic / Hosting Separation",
+      "depends_on": [
+        "K25"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 240,
+      "category": "v10"
+    },
+    {
+      "id": "K31",
+      "name": "V10 Negative & Adversarial Corpus",
+      "depends_on": [
+        "K25"
+      ],
+      "parallel_safe": false,
+      "timeout_seconds": 240,
+      "category": "v10"
+    },
+    {
+      "id": "K32",
+      "name": "V10 Standard / Contract-Set Alignment",
+      "depends_on": [
+        "N02"
+      ],
+      "parallel_safe": true,
+      "timeout_seconds": 180,
+      "category": "compatibility"
+    },
+    {
       "id": "R00",
       "name": "Documentation & Link Integrity",
       "depends_on": [
@@ -418,6 +507,43 @@
       "K12",
       "K13"
     ],
+    "v9": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K22",
+      "K23",
+      "K24"
+    ],
+    "v10": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K25",
+      "K26",
+      "K27",
+      "K28",
+      "K29",
+      "K30",
+      "K31"
+    ],
     "deep": [
       "N00",
       "N01",
@@ -449,27 +575,15 @@
       "K21",
       "K22",
       "K23",
-      "K24"
-    ],
-    "v9": [
-      "N00",
-      "N01",
-      "N02",
-      "N03",
-      "N04",
-      "N06",
-      "K00",
-      "K01",
-      "K15",
-      "K16",
-      "K17",
-      "K18",
-      "K19",
-      "K20",
-      "K21",
-      "K22",
-      "K23",
-      "K24"
+      "K24",
+      "K25",
+      "K26",
+      "K27",
+      "K28",
+      "K29",
+      "K30",
+      "K31",
+      "K32"
     ],
     "release": [
       "N00",
@@ -503,6 +617,14 @@
       "K22",
       "K23",
       "K24",
+      "K25",
+      "K26",
+      "K27",
+      "K28",
+      "K29",
+      "K30",
+      "K31",
+      "K32",
       "R00",
       "R01",
       "R02",
@@ -669,6 +791,121 @@
       "K20",
       "K21",
       "K24"
+    ],
+    "V10-Node-Reader": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K25",
+      "K26",
+      "K30",
+      "K31"
+    ],
+    "V10-Publisher": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K21",
+      "K25",
+      "K26",
+      "K27",
+      "K30",
+      "K31"
+    ],
+    "V10-Directory": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K25",
+      "K26",
+      "K30",
+      "K31",
+      "K28"
+    ],
+    "V10-GitHub-Host": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K25",
+      "K26",
+      "K30",
+      "K31",
+      "K29"
+    ],
+    "V10-Full": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K18",
+      "K19",
+      "K20",
+      "K21",
+      "K24",
+      "K25",
+      "K26",
+      "K27",
+      "K28",
+      "K30",
+      "K31"
+    ],
+    "V10-Standard": [
+      "N00",
+      "N01",
+      "N02",
+      "N03",
+      "N04",
+      "N06",
+      "K00",
+      "K01",
+      "K15",
+      "K16",
+      "K17",
+      "K22",
+      "K23",
+      "K24",
+      "K25",
+      "K30",
+      "K31",
+      "K32"
     ]
+  },
+  "authority": {
+    "qualification_only": true,
+    "authority_granted": false
   }
 }

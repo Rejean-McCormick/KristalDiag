@@ -1,48 +1,46 @@
 # Conformance model
 
-KristalDiag separates diagnostic campaigns from semantic conformance profiles. A required `SKIP` becomes `BLOCKED` at K14; missing evidence never becomes a pass.
+KristalDiag separates diagnostic campaigns from conformance profiles. A required `SKIP` is converted to `BLOCKED` by K14; missing evidence never becomes PASS.
 
-## Kristal v9 profiles
+## Kristal v10 profiles
 
-### V9-State-Reader
+### V10-Node-Reader
 
-Requires K15, K16, K17, K22 and K23 plus the neutral read-only harness. It validates the v9 machine contracts, independently reproduces golden commitments, checks state pinning, exercises the polymorphic workload corpus and runs commitment-invariance/adversarial cases.
+Validates v10 machine contracts, exact node/binding relations, the v9/v10 separation invariant and the v10 negative corpus.
 
-### V9-Builder
+### V10-Publisher
 
-Includes `V9-State-Reader` and K18. Derivations must bind exact logical inputs/outputs and deterministic claims must not silently rely on mutable selectors.
+Includes inherited v9 state/publisher checks and K27. A strong pass requires Publication Records plus local/retrieved bundle bytes that can be independently verified. A Publication Record without bundle bytes cannot prove retry/idempotence byte equality.
 
-### V9-Materializer
+### V10-Directory
 
-Includes `V9-State-Reader` and K19. Materializations must bind exact source commitments and declare lossless reconstructability under the baseline v9 contract.
+Includes Node Reader + K28. Directory entries are discovery/routing surfaces and do not redefine semantic federation.
 
-### V9-Publisher
+### V10-GitHub-Host
 
-Includes `V9-State-Reader` and K21. The examiner qualifies activation records and independently tests monotonic/compare-and-swap lifecycle behavior. Testing an external publisher implementation may additionally use an explicit driver with `--allow-exec`.
+Includes Node Reader + K29 and validates `kristal.host/github/1.0`. Optional plan-dependent host capabilities may be absent without changing semantic conformance.
 
-### V9-Full
+### V10-Full
 
-Requires all v9 surfaces: reader, builder, materializer, Exchange, publisher and K24 inherited compatibility qualification.
+Requires inherited V9-Full semantics plus v10 node, publisher, directory, separation and negative checks. Generic V10-Full does not require the GitHub host profile.
 
-## Historical profiles
+### V10-Standard
 
-The following remain supported and keep their pre-v9 meaning:
+Examiner profile for the normative KristalV10 repository itself. It checks inherited v9 compatibility, v10 machine contracts, separation/negative regressions and K32 release/contract-set alignment without pretending the Standard repository is itself a hosted publisher node.
 
-- `V7-Reader`
-- `V7-Mesh`
-- `V7-Projection`
-- `V7-Kristall`
+## V9 / historical profiles
 
-KristalDiag does not redefine these profiles merely because the tool now targets v9.
+`V9-State-Reader`, `V9-Builder`, `V9-Materializer`, `V9-Publisher`, `V9-Full` and historical `V7-*` profiles remain available. Their semantic commitment checks are not silently redefined by the v10 upgrade.
 
 ## Campaigns
 
-- `baseline`: neutral read-only repository diagnostics;
-- `standard`: historical v7 reader/canonicalization diagnostics;
-- `deep`: neutral + all historical and v9 semantic checks;
-- `v9`: neutral + all K15–K24 v9 checks;
-- `release`: deep + R00–R04 release-engineering evidence.
+- `baseline`: neutral read-only diagnostics;
+- `standard`: historical substrate checks;
+- `v9`: all K15–K24 v9 checks;
+- `v10`: K25–K31 hosted-network checks plus dependencies;
+- `deep`: broad neutral + historical + v9 + v10 checks;
+- `release`: deep + K32 + R00–R04 release evidence.
 
 ## Qualification boundary
 
-A PASS means the observed evidence satisfies the selected checks. It does not confer epistemic authority, operational authorization, deployment authority, recognition or factual truth.
+A PASS means observed evidence satisfies the selected checks. It does not grant epistemic authority, publication authority, activation authority, deployment authorization or factual truth.

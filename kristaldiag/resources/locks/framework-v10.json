@@ -1,0 +1,25 @@
+{
+  "format": "kristaldiag.framework-pin/v2",
+  "framework_repository": "Rejean-McCormick/KristalV10",
+  "framework_commit": "27c0c7db3d79a4597c1c964fe8281fa35b5f858a",
+  "standard_version": "10.0.0-draft.2",
+  "captured_at": "2026-10-07T18:35:43Z",
+  "contract_set_path": "contracts/contract-set.json",
+  "vendored_contract_set_sha256": "sha256:749007dc53f293aef78a9f1b29ff9da35452a4baf05bc23a0c801e540e4d37f3",
+  "upstream_git_blobs": {
+    "contracts/release.json": "81ec33a982d8cb10a0374f4610f4b0129dcd13af",
+    "contracts/contract-set.json": "6cc726650c5b7d51daa1164d473d5fb803f9af91",
+    "schemas/v10/kristal-node-manifest.schema.json": "adc105d3c0f32139bd966b01660aab5a34ebe4b3",
+    "schemas/v10/kristal-host-binding.schema.json": "3f0ca08e3b595b8d378dd58c22021b84e7e810fb",
+    "schemas/v10/kristal-publication.schema.json": "be5d72c6471ccdba676503e8092ce0e6f4fcda4b",
+    "schemas/v10/kristal-directory.schema.json": "d8022d9d3baba2d538a3569454e5bb81de4fb9af",
+    "schemas/v10/kristal-v10-capabilities.schema.json": "3f671591bc0a67ab1c80f3ff7c06164841f46d31",
+    "profiles/github/schemas/kristal-github-binding.schema.json": "360fdbdb0a5aa54267a5274c6994388de44f6a85",
+    "tck/v10/vectors/node-manifest.example.json": "4b40720104a56a8226db791696feb8b94147ae29",
+    "tck/v10/vectors/github-binding.example.json": "856df28bf704d0279b37f454f04c444719191fce",
+    "tck/v10/vectors/publication.example.json": "37cd6e0710f834e92c4d747fbd75d18a5b7b8b4a",
+    "tck/v10/vectors/directory.example.json": "f25deed43bd1ddf80d8d61611ed456c854b1babe",
+    "tck/v10/vectors/v10-capabilities.example.json": "b727a9ff5ccb74952b1c906abe6977b3f106a9d7"
+  },
+  "note": "Git blob SHAs identify the upstream pinned artifacts. Vendored examiner copies are validated independently and may be formatting-normalized; semantic conformance does not depend on target-provided schemas."
+}

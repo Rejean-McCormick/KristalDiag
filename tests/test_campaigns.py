@@ -48,3 +48,12 @@ def test_levelup_compatibility_shim_lists_campaigns(tmp_path):
     assert cp.returncode==0
     assert 'baseline' in cp.stdout and 'release' in cp.stdout
     assert 'compatibility shim' in cp.stderr
+
+def test_v10_campaign_contains_hosted_network_checks():
+    for lid in ('K25','K26','K27','K28','K29','K30','K31'):
+        assert lid in CAMPAIGNS['v10']
+
+def test_v10_profiles_are_declared():
+    for profile in ('V10-Node-Reader','V10-Publisher','V10-Directory','V10-GitHub-Host','V10-Full','V10-Standard'):
+        assert profile in PROFILES
+    assert 'K29' not in PROFILES['V10-Full']  # GitHub host support is optional for generic V10-Full.

@@ -41,15 +41,23 @@ V9_SCHEMAS={
  'kristal_v9_capabilities':'kristal-v9-capabilities.schema.json',
 }
 
+V10_SCHEMAS={
+ 'kristal_node_manifest':'kristal-node-manifest.schema.json',
+ 'kristal_host_binding':'kristal-host-binding.schema.json',
+ 'kristal_publication':'kristal-publication.schema.json',
+ 'kristal_directory':'kristal-directory.schema.json',
+ 'kristal_v10_capabilities':'kristal-v10-capabilities.schema.json',
+}
+
 class SchemaStore:
     def __init__(self, repo_root:Path):
         self.root=repo_root
         packaged=Path(__file__).resolve().parent/'resources'/'contracts'
-        base=(repo_root/'contracts') if (repo_root/'contracts'/'v7').is_dir() and (repo_root/'contracts'/'v9').is_dir() else packaged
-        # Framework repositories keep normative machine schemas under schemas/, while
-        # KristalDiag vendors them under resources/contracts/. Prefer schemas/ when present.
-        schema_base=(repo_root/'schemas') if (repo_root/'schemas'/'v9').is_dir() else base
-        self.v6=schema_base/'v6'; self.v7=schema_base/'v7'; self.v8=schema_base/'v8'; self.v9=schema_base/'v9'
+        # Examiner independence: never validate a target with schemas supplied by that same target.
+        # Target contracts are inspected separately by release/compatibility levels.
+        self.v6=packaged/'v6'; self.v7=packaged/'v7'; self.v8=packaged/'v8'; self.v9=packaged/'v9'; self.v10=packaged/'v10'
+        self.github=packaged/'github'
+        self.target_schema_root=repo_root/'schemas'
         self._cache={}
     def _load(self,p:Path):
         key=str(p)
@@ -67,6 +75,12 @@ class SchemaStore:
         typ=artifact.get('artifact_type'); fn=V9_SCHEMAS.get(typ)
         if not fn:return False,[f'no v9 schema mapping for artifact_type={typ!r}']
         return self._validate(self._load(self.v9/fn),artifact)
+    def validate_v10(self,artifact:dict[str,Any]):
+        typ=artifact.get('artifact_type'); fn=V10_SCHEMAS.get(typ)
+        if not fn:return False,[f'no v10 schema mapping for artifact_type={typ!r}']
+        return self._validate(self._load(self.v10/fn),artifact)
+    def validate_github_binding(self,artifact:dict[str,Any]):
+        return self._validate(self._load(self.github/'kristal-github-binding.schema.json'),artifact)
     def validate_v6(self,artifact:dict[str,Any]):
         return self._validate(self._load(self.v6/'kristal-state.schema.json'),artifact)
     def validate_extension(self,ext:dict[str,Any]):

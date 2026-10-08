@@ -1,42 +1,23 @@
 # GitHub qualification model
 
-KristalDiag is an **independent examiner**, not the normative Kristal Standard.
+KristalDiag is an **independent examiner**, not the normative Kristal Standard and not the GitHub lifecycle controller.
 
 ## Automatic gates
 
-The automatic workflow has two layers:
-
-1. KristalDiag self-tests on Python 3.11, 3.12 and 3.13 and requires its built-in `V9-Full` corpus to pass.
-2. It checks out Kristal-Framework independently and applies `V9-Full`, retaining the exact resolved SHA and evidence bundle.
-
-During draft development the Framework job may resolve a moving branch such as `main`, but the resolved commit is always recorded. RC/final qualification should pin an immutable Framework commit/tag.
+1. KristalDiag self-tests on Python 3.11, 3.12 and 3.13 and requires its built-in `V10-Full` corpus to pass.
+2. It checks out `Rejean-McCormick/KristalV10` at the immutable baseline commit `27c0c7db3d79a4597c1c964fe8281fa35b5f858a` and applies `V10-Standard`.
+3. Release audit also runs the broad `release` campaign and verifies evidence-manifest integrity.
 
 ## Independence boundary
 
-KristalDiag's v9 commitment implementation is Python code under `kristaldiag/v9.py`. It does not import or execute the Framework JavaScript commitment implementation. Agreement is established through the normative prose and golden vectors.
+The v9 commitment implementation is Python under `kristaldiag/v9.py`; v10 publication/bundle identity checks are Python under `kristaldiag/v10.py`. The examiner does not execute the Framework JavaScript verifier to manufacture agreement.
+
+SchemaStore uses frozen examiner copies rather than target-provided schemas. `kristaldiag/resources/locks/framework-v10.json` records the upstream Framework commit and Git blob identities used for the draft.2 examiner capture.
 
 ## Inherited substrate
 
-Historical `V7-*` profiles remain available with their previous KristalDiag fixtures. For v9, K24 uses a distinct exact baseline under:
+Historical `V7-*` and v9 profiles remain available. K24 continues to use the frozen inherited baseline under `kristaldiag/resources/baseline/9.0.0-draft.1/`; v10 does not silently rewrite historical commitment meaning.
 
-`kristaldiag/resources/baseline/9.0.0-draft.1/`
+## Lifecycle boundary
 
-That baseline mirrors the v6/v7/v8 substrate pinned by the Framework v9 compatibility lock.
-
-## Known inherited finding
-
-Independent qualification of the supplied `9.0.0-draft.1` Framework snapshot fails `K24-IDENTITY-003` for:
-
-- `tck/v7/vectors/v6-compatible-projection.example.json`
-
-The artifact retains the base v6 `state_id` / `content_hash` after adding `extensions.kristal_v7`. Under the frozen v6 identity rule, only `state_id`, `content_hash`, and `signatures` are excluded from the hash target, so the extension changes the expected identity.
-
-Observed declared state ID:
-
-`sha256:534d57141a4d1c982e2ddb25abfda19be7d63234667542dd3eea6acc5cf6b759`
-
-Independent expected state ID:
-
-`sha256:9f3fdad6b298e47a3f8750f418899f9208c4e3691f20233648abde2e2188bd79`
-
-This disagreement is intentionally **not suppressed**. It must be resolved explicitly before final v9 qualification.
+Kristal GitHub Setup/Bootstrap owns provisioning, qualification dispatch, publication and activation. KristalDiag may independently examine the resulting repository descriptors, downloaded publication bundles and evidence, but does not mutate those surfaces.

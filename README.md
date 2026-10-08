@@ -1,17 +1,37 @@
-# KristalDiag v9
+# KristalDiag v10
 
 [![KristalDiag CI](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/ci.yml/badge.svg)](https://github.com/Rejean-McCormick/KristalDiag/actions/workflows/ci.yml)
 
-**KristalDiag is the independent diagnostic, conformance and release-qualification suite for Kristal.**
+**KristalDiag is the independent diagnostic, conformance and release-qualification examiner for Kristal.**
 
-Current target: **Kristal `9.0.0-draft.1`**. It preserves the existing v7 qualification profiles and adds an independent Python qualification surface for Kristal v9 Semantic State Architecture.
+Current target: **Kristal `10.0.0-draft.2`**, pinned to Framework repository `Rejean-McCormick/KristalV10` commit `27c0c7db3d79a4597c1c964fe8281fa35b5f858a`.
 
 ```text
-Kristal Framework = normative specification + reference implementation
-KristalDiag        = independent examiner
+KristalV10              = normative specification + reference implementation
+KristalDiag              = independent examiner
+Kristal Manager          = local inventory + backup
+Kristal GitHub Setup     = bootstrap + qualify/publish/activate
+Kompiler                 = optional read-only context compiler
 ```
 
-The v9 commitment implementation in KristalDiag does **not** import or execute the Framework JavaScript commitment code. It independently implements the normative projection, domain separation, JCS and SHA-256 rules and compares its results with the normative golden vectors.
+KristalDiag does **not** manage Local Kristals, perform backups, publish releases or activate channels. It examines artifacts and evidence produced by those systems.
+
+## What changed in v10
+
+KristalDiag keeps its independent v9 commitment implementation and adds independent v10 checks for:
+
+- node manifests and capability descriptors;
+- generic host bindings and `kristal.host/github/1.0`;
+- node/binding relational coherence;
+- Publication Records and exact state references;
+- byte-verifiable `kristal.publication-bundle/1.0` bundles;
+- publication identity binding to the exact bundle manifest;
+- directory/discovery semantics;
+- the invariant `SEMANTIC STATE != HOSTING != PUBLICATION LOCATION != DISCOVERY DIRECTORY`;
+- malformed v10 contracts and tampered publication bytes;
+- Standard `release.json` / `contract-set.json` alignment.
+
+The examiner uses its own frozen contracts. It does not validate a target using schemas supplied by that target.
 
 ## Quick start
 
@@ -21,62 +41,77 @@ python -m pip install -e .
 kristaldiag doctor --target .
 kristaldiag self-test
 
-# Kristal v9
-kristaldiag conform /path/to/Kristal-Framework --profile V9-State-Reader
-kristaldiag conform /path/to/Kristal-Framework --profile V9-Full
+# Generic hosted-network conformance
+kristaldiag conform /path/to/target --profile V10-Node-Reader
+kristaldiag conform /path/to/target --profile V10-Full
 
-# Historical v7 profiles remain available
-kristaldiag conform /path/to/target --profile V7-Projection
+# GitHub host profile
+kristaldiag conform /path/to/hosted-node --profile V10-GitHub-Host
 
-# Operational campaigns
-kristaldiag run baseline /path/to/target
-kristaldiag run v9 /path/to/target
-kristaldiag run release /path/to/target
+# Campaigns
+kristaldiag run v10 /path/to/target
+kristaldiag run release /path/to/KristalV10
 ```
 
-## V9 profiles
+## V10 profiles
 
 | Profile | Qualification surface |
 |---|---|
-| `V9-State-Reader` | schemas, independent commitments, snapshots, polymorphism, negative corpus |
-| `V9-Builder` | State Reader + derivations/reproducibility |
-| `V9-Materializer` | State Reader + materialization binding |
-| `V9-Publisher` | State Reader + Build/Publish/Activate semantics |
-| `V9-Full` | Builder + Materializer + Exchange + Publisher + inherited v6/v7/v8 compatibility |
+| `V10-Node-Reader` | v10 contracts, node/binding relations, separation, negative corpus |
+| `V10-Publisher` | inherited v9 reader/publisher + verified v10 publication bundles |
+| `V10-Directory` | Node Reader + directory/discovery semantics |
+| `V10-GitHub-Host` | Node Reader + GitHub reference host profile |
+| `V10-Full` | inherited V9-Full semantics + generic v10 node/publisher/directory checks |
+| `V10-Standard` | normative Framework repository: inherited compatibility + v10 contracts/regressions + release/contract-set alignment |
 
-A required `SKIP` is fail-closed by the K14 gate. Qualification never grants execution authority, publication authority, epistemic authority or truth.
+`V10-Full` intentionally does **not** require GitHub. GitHub is a reference host profile, not semantic identity.
 
-## V9 levels
+## Diagnostic levels
 
-KristalDiag keeps K00–K13 for the historical v6/v7 substrate and K14 as the final gate. V9 adds K15–K24:
+V10 adds K25–K32:
 
 ```text
-K15  machine contracts
-K16  independent logical commitments
-K17  state snapshot semantics
-K18  derivations and reproducibility
-K19  materialization binding
-K20  exchange binding
-K21  build / publish / activate
-K22  polymorphic workload corpus
-K23  negative and invariance corpus
-K24  inherited v6/v7/v8 compatibility substrate
+K25  machine contracts & capabilities
+K26  node / binding relations
+K27  Publication Record + bundle integrity
+K28  directory & discovery semantics
+K29  GitHub host profile
+K30  semantic / hosting separation
+K31  negative & adversarial corpus
+K32  Standard / contract-set alignment
 ```
 
-## Independent frozen baseline
+K14 remains the final fail-closed gate.
 
-KristalDiag contains two intentionally separate contract sets:
+## Independent publication verification
 
-- its legacy v6/v7 fixtures, retained so historical `V7-*` profiles remain stable;
-- `kristaldiag/resources/baseline/9.0.0-draft.1/`, an exact examiner copy of the v6/v7/v8 substrate pinned by Kristal v9's compatibility lock.
+For a local or downloaded publication bundle containing:
 
-This prevents upgrading KristalDiag to v9 from silently rewriting what its older v7 profiles meant.
+```text
+publication.json
+bundle-manifest.json
+state-snapshot.json
+```
+
+KristalDiag independently recomputes:
+
+1. the v9 State Snapshot commitment;
+2. payload sizes and SHA-256 byte digests;
+3. the manifest byte digest;
+4. the v10 `publication_id` identity projection;
+5. the binding between Publication Record, manifest and exact state.
+
+It does not call the Framework JavaScript verifier for this check.
+
+## Frozen examiner provenance
+
+`kristaldiag/resources/locks/framework-v10.json` records the pinned Framework commit and upstream Git blob identities used to capture the v10 examiner fixtures. Vendored examiner copies are integrity-hashed by `contract-manifest.json`.
 
 ## Read-only boundary
 
-KristalDiag fingerprints the target before and after qualification. Target code is not imported. Target commands are never guessed. Driver commands execute only with `--allow-exec`, use argv arrays with `shell=False`, and run under bounded timeouts.
+KristalDiag fingerprints the target before and after qualification. Target code is not imported. Target commands execute only through an explicit trusted driver with `--allow-exec`; ordinary qualification is static/read-only.
 
-Every conformance verdict states:
+Every conformance verdict remains qualification evidence only:
 
 ```json
 {
@@ -87,34 +122,10 @@ Every conformance verdict states:
 
 ## Evidence
 
-Each run produces a verifiable evidence bundle under `.kristaldiag/` (or the selected `--control-dir`):
-
-```text
-current/
-├── effective_config.json
-├── levels/<ID>/result.json
-├── summary.json
-├── summary.txt
-├── report.md
-├── conformance-verdict.json
-└── evidence-manifest.json
-```
-
-Verify it independently with:
+Each run produces a verifiable evidence bundle under `.kristaldiag/` or the selected `--control-dir`. Verify it with:
 
 ```bash
 kristaldiag verify-run /path/to/current/summary.json
 ```
 
-## Documentation
-
-- [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md)
-- [`docs/LEVELS.md`](docs/LEVELS.md)
-- [`docs/CONFORMANCE.md`](docs/CONFORMANCE.md)
-- [`docs/CI_INTEGRATION.md`](docs/CI_INTEGRATION.md)
-- [`docs/DRIVER.md`](docs/DRIVER.md)
-- [`docs/SECURITY.md`](docs/SECURITY.md)
-- [`docs/REPORTING.md`](docs/REPORTING.md)
-- [`docs/CONFIG_REFERENCE.md`](docs/CONFIG_REFERENCE.md)
-- [`docs/OPERATING_MODEL.md`](docs/OPERATING_MODEL.md)
-- [`docs/KNOWN_FINDINGS.md`](docs/KNOWN_FINDINGS.md)
+See `docs/LEVELS.md`, `docs/CONFORMANCE.md`, `docs/ARCHITECTURE.md` and `docs/CI_INTEGRATION.md`.
