@@ -3,7 +3,7 @@ from __future__ import annotations
 LEVELS = {
     'N00': {'name':'Diagnostic Integrity','depends_on':[],'parallel_safe':True,'timeout_seconds':60,'category':'diagnostics'},
     'N01': {'name':'Target Context','depends_on':['N00'],'parallel_safe':True,'timeout_seconds':60,'category':'context'},
-    'N02': {'name':'Repository Inventory','depends_on':['N01'],'parallel_safe':True,'timeout_seconds':120,'category':'inventory'},
+    'N02': {'name':'Repository Inventory','depends_on':['N01'],'parallel_safe':True,'timeout_seconds':300,'category':'inventory'},
     'N03': {'name':'Repository Hygiene','depends_on':['N02'],'parallel_safe':True,'timeout_seconds':180,'category':'hygiene'},
     'N04': {'name':'Tooling Discovery','depends_on':['N02'],'parallel_safe':True,'timeout_seconds':120,'category':'tooling'},
     'N05': {'name':'Declared Validations','depends_on':['N01','N02'],'parallel_safe':False,'timeout_seconds':1800,'category':'validation'},
@@ -37,7 +37,7 @@ LEVELS = {
     'K26': {'name':'V10 Node / Binding Relations','depends_on':['K25'],'parallel_safe':True,'timeout_seconds':180,'category':'v10'},
     'K27': {'name':'V10 Publication Bundle Integrity','depends_on':['K25','K26'],'parallel_safe':False,'timeout_seconds':300,'category':'v10'},
     'K28': {'name':'V10 Directory & Discovery Semantics','depends_on':['K25','K26'],'parallel_safe':True,'timeout_seconds':180,'category':'v10'},
-    'K29': {'name':'V10 GitHub Host Profile','depends_on':['K25','K26'],'parallel_safe':True,'timeout_seconds':180,'category':'v10'},
+    'K29': {'name':'V10 GitHub Host Profile','depends_on':['K25','K26'],'parallel_safe':True,'timeout_seconds':1800,'category':'v10'},
     'K30': {'name':'V10 Semantic / Hosting Separation','depends_on':['K25'],'parallel_safe':False,'timeout_seconds':240,'category':'v10'},
     'K31': {'name':'V10 Negative & Adversarial Corpus','depends_on':['K25'],'parallel_safe':False,'timeout_seconds':240,'category':'v10'},
     'K32': {'name':'V10 Standard / Contract-Set Alignment','depends_on':['N02'],'parallel_safe':True,'timeout_seconds':180,'category':'compatibility'},

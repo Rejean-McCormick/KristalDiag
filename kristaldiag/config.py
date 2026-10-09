@@ -5,8 +5,8 @@ from pathlib import Path
 
 DEFAULT={
  'control_dir':'.kristaldiag',
- 'max_json_files':10000,
- 'max_target_files':50000,
+ 'max_json_files':100000,
+ 'max_target_files':500000,
  'default_profile':None,
  'allow_exec':False,
  'strict_warnings':False,
@@ -22,7 +22,7 @@ DEFAULT={
  },
  'scan':{
    'exclude_dirs':['.git','.hg','.svn','.kristaldiag','.levelupdiag','node_modules','vendor','dist','build','target','.venv','venv','__pycache__','.cache','coverage','.tox','.mypy_cache','.pytest_cache'],
-   'max_files':20000,
+   'max_files':300000,
    'max_file_bytes':1048576,
    'max_security_files':4000,
    'large_file_bytes':10485760,

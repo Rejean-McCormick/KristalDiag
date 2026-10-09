@@ -1,7 +1,7 @@
-# Known findings
+# Known Findings
 
-Historical findings recorded against earlier v9/v10 snapshots are not automatically asserted against `10.0.0-draft.2`; they must be reproduced on the exact subject before being treated as current.
+Current exact Framework subject: `Rejean-McCormick/Kristal-Framework@fe54a88271e2ad7522abacdfbde90f9397954053` (`10.0.0-draft.3.1`).
 
-KristalDiag 1.0 adds regression checks for several earlier defect classes: unsupported v10 roles, null binding references, malformed directory collections, non-byte-verifiable publication resources and tampered publication bundle bytes.
+The inherited V7 portable-state identity mismatch previously reproduced against draft.3 was corrected by the Framework draft.3.1 compatibility erratum. KristalDiag retains the independent K24 check and corrected fixture; no waiver was introduced.
 
-The examiner pin is recorded in `kristaldiag/resources/locks/framework-v10.json`. If the Framework commit changes, the v10 examiner resources and regression results must be reviewed and repinned rather than silently following a branch.
+Historical findings from earlier snapshots remain historical until independently reproduced against this exact commit.

@@ -4,9 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       framework_ref:
-        description: "KristalV10 commit/tag to audit"
+        description: "Kristal-Framework commit/tag to audit"
         required: true
-        default: "27c0c7db3d79a4597c1c964fe8281fa35b5f858a"
 
 permissions:
   contents: read
@@ -22,12 +21,12 @@ jobs:
         with:
           path: KristalDiag
           persist-credentials: false
-      - name: Checkout selected KristalV10
+      - name: Checkout selected Kristal-Framework
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          repository: Rejean-McCormick/KristalV10
+          repository: Rejean-McCormick/Kristal-Framework
           ref: ${{ inputs.framework_ref }}
-          path: KristalV10
+          path: Kristal-Framework
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Python
@@ -38,16 +37,16 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           python -m pip install -e KristalDiag
-          if [ -f KristalV10/requirements-dev.txt ]; then python -m pip install -r KristalV10/requirements-dev.txt; fi
+          if [ -f Kristal-Framework/requirements-dev.txt ]; then python -m pip install -r Kristal-Framework/requirements-dev.txt; fi
       - name: Run independent V10-Full qualification
         run: >-
-          kristaldiag conform KristalV10
+          kristaldiag conform Kristal-Framework
           --profile V10-Standard
           --control-dir "$RUNNER_TEMP/kristaldiag-v10"
       - name: Run broad independent release campaign
         if: always()
         run: >-
-          kristaldiag run release KristalV10
+          kristaldiag run release Kristal-Framework
           --control-dir "$RUNNER_TEMP/kristaldiag-release"
       - name: Verify produced evidence
         if: always()
@@ -65,8 +64,8 @@ jobs:
           [ ! -d "$RUNNER_TEMP/kristaldiag-release/current" ] || cp -a "$RUNNER_TEMP/kristaldiag-release/current/." ci-evidence/release/
           {
             echo "KristalDiag=$(git -C KristalDiag rev-parse HEAD)"
-            echo "KristalV10=$(git -C KristalV10 rev-parse HEAD)"
-            echo "Kristal-Version=$(python -c 'import json; print(json.load(open("KristalV10/contracts/release.json"))["version"])')"
+            echo "Kristal-Framework=$(git -C Kristal-Framework rev-parse HEAD)"
+            echo "Kristal-Version=$(python -c 'import json; print(json.load(open("Kristal-Framework/contracts/release.json"))["version"])')"
           } > ci-evidence/subjects.txt
       - name: Upload release-audit evidence
         if: always()

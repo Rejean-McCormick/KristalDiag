@@ -81,6 +81,12 @@ class SchemaStore:
         return self._validate(self._load(self.v10/fn),artifact)
     def validate_github_binding(self,artifact:dict[str,Any]):
         return self._validate(self._load(self.github/'kristal-github-binding.schema.json'),artifact)
+    def validate_github_read_surface(self,artifact:dict[str,Any]):
+        return self._validate(self._load(self.github/'kristal-github-read-surface.schema.json'),artifact)
+    def validate_github_sync_manifest(self,artifact:dict[str,Any]):
+        return self._validate(self._load(self.github/'kristal-github-sync-manifest.schema.json'),artifact)
+    def validate_github_collection_index(self,artifact:dict[str,Any]):
+        return self._validate(self._load(self.github/'kristal-github-collection-index.schema.json'),artifact)
     def validate_v6(self,artifact:dict[str,Any]):
         return self._validate(self._load(self.v6/'kristal-state.schema.json'),artifact)
     def validate_extension(self,ext:dict[str,Any]):

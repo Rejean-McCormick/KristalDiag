@@ -4,12 +4,12 @@
 
 **KristalDiag is the independent diagnostic, conformance and release-qualification examiner for Kristal.**
 
-Current target: **Kristal `10.0.0-draft.2`**, pinned to Framework repository `Rejean-McCormick/KristalV10` commit `27c0c7db3d79a4597c1c964fe8281fa35b5f858a`.
+Current target: **Kristal `10.0.0-draft.3.1`**, pinned to the immutable published Framework commit `Rejean-McCormick/Kristal-Framework@fe54a88271e2ad7522abacdfbde90f9397954053`. The Windows source-package SHA-256 is retained only as supplemental capture evidence.
 
 ```text
-KristalV10              = normative specification + reference implementation
+Kristal-Framework              = normative specification + reference implementation
 KristalDiag              = independent examiner
-Kristal Manager          = local inventory + backup
+Kristal Manager          = local inventory + validation orchestration + GitHub sync
 Kristal GitHub Setup     = bootstrap + qualify/publish/activate
 Kompiler                 = optional read-only context compiler
 ```
@@ -29,7 +29,9 @@ KristalDiag keeps its independent v9 commitment implementation and adds independ
 - directory/discovery semantics;
 - the invariant `SEMANTIC STATE != HOSTING != PUBLICATION LOCATION != DISCOVERY DIRECTORY`;
 - malformed v10 contracts and tampered publication bytes;
-- Standard `release.json` / `contract-set.json` alignment.
+- Standard `release.json` / `contract-set.json` alignment;
+- draft.3.1 GitHub AI/read surfaces, sync manifests and high-scale collection indexes;
+- exact hosted file byte/digest verification plus AI/state binding.
 
 The examiner uses its own frozen contracts. It does not validate a target using schemas supplied by that target.
 
@@ -50,8 +52,21 @@ kristaldiag conform /path/to/hosted-node --profile V10-GitHub-Host
 
 # Campaigns
 kristaldiag run v10 /path/to/target
-kristaldiag run release /path/to/KristalV10
+kristaldiag run release /path/to/Kristal-Framework
 ```
+
+
+## Draft.3 GitHub AI/read-surface verification
+
+KristalDiag independently verifies the operational contracts used by Local Kit 3.2.4, Manager alpha.11 and the GitHub collection workflow:
+
+- `kristal.github-read-surface/1.0`;
+- `kristal.github-sync-manifest/1.0`;
+- `kristal.github-collection-index/1.0`.
+
+For a hosted collection, K29 can verify `kristals/index.json` and every indexed `kristals/<slug>/` subtree, including exact file SHA-256/size, the v9 State Commitment, `AI_MANIFEST.json`, `ai/INDEX.json`, the derived surface digest and unmanaged-file exclusion. Subtrees are checked with bounded parallel workers so thousands of Kristals can be examined without changing the semantic model.
+
+The read surface and collection index remain derived navigation/integrity surfaces. They are **not** v9 semantic authority, publication, or activation.
 
 ## V10 profiles
 
@@ -60,7 +75,7 @@ kristaldiag run release /path/to/KristalV10
 | `V10-Node-Reader` | v10 contracts, node/binding relations, separation, negative corpus |
 | `V10-Publisher` | inherited v9 reader/publisher + verified v10 publication bundles |
 | `V10-Directory` | Node Reader + directory/discovery semantics |
-| `V10-GitHub-Host` | Node Reader + GitHub reference host profile |
+| `V10-GitHub-Host` | Node Reader + GitHub reference host profile + draft.3.1 hosted read-surface checks when present |
 | `V10-Full` | inherited V9-Full semantics + generic v10 node/publisher/directory checks |
 | `V10-Standard` | normative Framework repository: inherited compatibility + v10 contracts/regressions + release/contract-set alignment |
 
@@ -105,7 +120,7 @@ It does not call the Framework JavaScript verifier for this check.
 
 ## Frozen examiner provenance
 
-`kristaldiag/resources/locks/framework-v10.json` records the pinned Framework commit and upstream Git blob identities used to capture the v10 examiner fixtures. Vendored examiner copies are integrity-hashed by `contract-manifest.json`.
+`kristaldiag/resources/locks/framework-v10.json` records the exact published Framework commit and captured draft.3.1 contract hashes. Vendored examiner copies are integrity-hashed by `contract-manifest.json`.
 
 ## Read-only boundary
 

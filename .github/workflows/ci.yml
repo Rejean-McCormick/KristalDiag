@@ -43,24 +43,24 @@ jobs:
         run: kristaldiag self-test
 
   framework-v10:
-    name: Independent Kristal v10 full gate
+    name: Independent Kristal v10 draft.3.1 gate
     needs: self-test
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      KRISTAL_FRAMEWORK_REF: "27c0c7db3d79a4597c1c964fe8281fa35b5f858a"
+      KRISTAL_FRAMEWORK_REF: fe54a88271e2ad7522abacdfbde90f9397954053
     steps:
       - name: Checkout KristalDiag
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           path: KristalDiag
           persist-credentials: false
-      - name: Checkout pinned KristalV10
+      - name: Checkout pinned Kristal-Framework
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          repository: Rejean-McCormick/KristalV10
+          repository: Rejean-McCormick/Kristal-Framework
           ref: ${{ env.KRISTAL_FRAMEWORK_REF }}
-          path: KristalV10
+          path: Kristal-Framework
           fetch-depth: 0
           persist-credentials: false
       - name: Setup Python
@@ -76,15 +76,15 @@ jobs:
           mkdir -p ci-evidence
           {
             echo "KristalDiag=$(git -C KristalDiag rev-parse HEAD)"
-            echo "KristalV10=$(git -C KristalV10 rev-parse HEAD)"
-            echo "Kristal-Version=$(python -c 'import json; print(json.load(open("KristalV10/contracts/release.json"))["version"])')"
+            echo "Kristal-Framework=$(git -C Kristal-Framework rev-parse HEAD)"
+            echo "Kristal-Version=$(python -c 'import json; print(json.load(open("Kristal-Framework/contracts/release.json"))["version"])')"
             python --version
           } | tee ci-evidence/subjects.txt
       - name: KristalDiag doctor
-        run: kristaldiag doctor --target KristalV10
+        run: kristaldiag doctor --target Kristal-Framework
       - name: Qualify Kristal v10
         run: >-
-          kristaldiag conform KristalV10
+          kristaldiag conform Kristal-Framework
           --profile V10-Standard
           --control-dir "$RUNNER_TEMP/kristaldiag-v10"
       - name: Verify evidence integrity

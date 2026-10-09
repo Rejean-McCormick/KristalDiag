@@ -1,7 +1,7 @@
 from __future__ import annotations
 import argparse,json,sys,tempfile,shutil
 from pathlib import Path
-from . import VERSION,STANDARD_TARGET,FRAMEWORK_REPOSITORY,FRAMEWORK_COMMIT
+from . import VERSION,STANDARD_TARGET,FRAMEWORK_REPOSITORY,FRAMEWORK_COMMIT,FRAMEWORK_SNAPSHOT_SHA256,FRAMEWORK_PIN_STATUS
 from .config import load_config
 from .profiles import PROFILES
 from .manifest import CAMPAIGNS,LEVELS
@@ -44,7 +44,7 @@ def main(argv=None):
             print('scheduler: isolated-process / bounded-parallel')
             try:import jsonschema;print('jsonschema: OK')
             except Exception:print('jsonschema: MISSING');return 30
-            print(f'framework-pin: {FRAMEWORK_REPOSITORY}@{FRAMEWORK_COMMIT}');print(f'contracts/v10: {(contracts/"v10").is_dir()}');print(f'contracts/github: {(contracts/"github").is_dir()}');print(f'contracts/v9: {(contracts/"v9").is_dir()}');print(f'contracts/v8: {(contracts/"v8").is_dir()}');print(f'contracts/v7: {(contracts/"v7").is_dir()}');print(f'contracts/v6: {(contracts/"v6/kristal-state.schema.json").is_file()}')
+            print(f'framework-pin: {FRAMEWORK_REPOSITORY}@{FRAMEWORK_COMMIT}' if FRAMEWORK_COMMIT else f'framework-pin: {FRAMEWORK_PIN_STATUS} {FRAMEWORK_SNAPSHOT_SHA256}');print(f'contracts/v10: {(contracts/"v10").is_dir()}');print(f'contracts/github: {(contracts/"github").is_dir()}');print(f'contracts/v9: {(contracts/"v9").is_dir()}');print(f'contracts/v8: {(contracts/"v8").is_dir()}');print(f'contracts/v7: {(contracts/"v7").is_dir()}');print(f'contracts/v6: {(contracts/"v6/kristal-state.schema.json").is_file()}')
             from .utils import sha256_file
             try:
                 cm=read_json(resources/'contract-manifest.json');bad=[]

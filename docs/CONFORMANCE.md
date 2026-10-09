@@ -26,7 +26,7 @@ Requires inherited V9-Full semantics plus v10 node, publisher, directory, separa
 
 ### V10-Standard
 
-Examiner profile for the normative KristalV10 repository itself. It checks inherited v9 compatibility, v10 machine contracts, separation/negative regressions and K32 release/contract-set alignment without pretending the Standard repository is itself a hosted publisher node.
+Examiner profile for the normative Kristal-Framework repository itself. It checks inherited v9 compatibility, v10 machine contracts, separation/negative regressions and K32 release/contract-set alignment without pretending the Standard repository is itself a hosted publisher node.
 
 ## V9 / historical profiles
 

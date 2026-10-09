@@ -44,3 +44,46 @@ def discover(root:Path, *, max_files:int=10000)->Inventory:
         if art.artifact_type=='kristall_manifest':inv.manifests.append(art)
         if data.get('schema')=='kristaldiag.implementation.v1':inv.implementation_manifest=art
     return inv
+
+
+def inventory_to_data(inv: Inventory, scan_root: Path) -> dict[str, Any]:
+    return {
+        'schema': 'kristaldiag.inventory-cache.v1',
+        'scan_root': str(scan_root.resolve()),
+        'root': str(inv.root.resolve()),
+        'parse_errors': inv.parse_errors,
+        'is_standard_repo': inv.is_standard_repo,
+        'scan_limit_reached': inv.scan_limit_reached,
+        'artifacts': [
+            {
+                'rel': a.rel,
+                'data': a.data,
+                'artifact_type': a.artifact_type,
+                'schema_version': a.schema_version,
+            }
+            for a in inv.artifacts
+        ],
+    }
+
+
+def inventory_from_data(data: dict[str, Any], root: Path) -> Inventory:
+    root = root.resolve()
+    scan_root = root if root.is_dir() else root.parent
+    inv = Inventory(root=root)
+    inv.parse_errors = [(str(x[0]), str(x[1])) for x in (data.get('parse_errors') or []) if isinstance(x, (list, tuple)) and len(x) >= 2]
+    inv.is_standard_repo = bool(data.get('is_standard_repo'))
+    inv.scan_limit_reached = bool(data.get('scan_limit_reached'))
+    for row in data.get('artifacts') or []:
+        if not isinstance(row, dict) or not isinstance(row.get('rel'), str) or not isinstance(row.get('data'), dict):
+            continue
+        rel = row['rel']
+        p = scan_root / Path(*rel.split('/'))
+        art = JsonArtifact(p, rel, row['data'], row.get('artifact_type'), row.get('schema_version'))
+        inv.artifacts.append(art)
+        if art.artifact_type:
+            inv.by_type.setdefault(art.artifact_type, []).append(art)
+        if art.artifact_type == 'kristall_manifest':
+            inv.manifests.append(art)
+        if art.data.get('schema') == 'kristaldiag.implementation.v1':
+            inv.implementation_manifest = art
+    return inv

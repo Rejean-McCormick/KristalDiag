@@ -11,6 +11,7 @@ from .report import write_reports
 from .utils import run_id,utc_now,write_json,sha256_file,safe_copytree,fingerprint_tree,read_json
 from .verdicts import combine,exit_code
 from .runner_types import target_kind
+from .discovery import discover, inventory_to_data
 
 HARD_DEP_BLOCK={'BLOCKED','ERROR','INFRA_ERROR','CONFIG_ERROR'}
 
@@ -58,14 +59,21 @@ def run(target:Path,cfg:Config,*,profile:str|None=None,campaign:str|None=None,le
     current.mkdir(parents=True,exist_ok=True)
     started=utc_now();selected=_select(profile,campaign,levels)
     effective=current/'effective_config.json';write_json(effective,cfg.data)
-    max_target=int(cfg.data.get('max_target_files',50000) or 50000)
+    max_target=int(cfg.data.get('max_target_files',500000) or 500000)
     before,fp_limit=fingerprint_tree(target,exclude_roots=(cfg.control,),max_files=max_target)
+    # Discover JSON once per run. Isolated workers load this transient cache instead
+    # of walking/parsing a large GitHub collection independently for every level.
+    inventory=discover(target,max_files=int(cfg.data.get('max_json_files',100000) or 100000))
+    cache_dir=control/'.cache'/rid;cache_dir.mkdir(parents=True,exist_ok=True)
+    inventory_cache=cache_dir/'inventory.json';write_json(inventory_cache,inventory_to_data(inventory,scan_root))
+    try:os.chmod(inventory_cache,0o600)
+    except OSError:pass
     ex=cfg.data.get('execution',{});max_jobs=max(1,min(int(jobs or ex.get('max_parallel',4) or 1),16));ff=ex.get('fail_fast',False) if fail_fast is None else fail_fast
     pending=set(selected);results={};active={};pool=ThreadPoolExecutor(max_workers=max_jobs)
 
     def launch(lid):
         meta=LEVELS[lid];level_dir=current/'levels'/lid;level_dir.mkdir(parents=True,exist_ok=True);out=level_dir/'result.json'
-        cmd=[sys.executable,'-m','kristaldiag.worker','--level',lid,'--target',str(target),'--repo-root',str(repo_root),'--config',str(effective),'--control-dir',str(cfg.control),'--run-id',rid,'--output',str(out)]
+        cmd=[sys.executable,'-m','kristaldiag.worker','--level',lid,'--target',str(target),'--repo-root',str(repo_root),'--config',str(effective),'--control-dir',str(cfg.control),'--run-id',rid,'--output',str(out),'--inventory-cache',str(inventory_cache)]
         if profile:cmd+=['--profile',profile]
         if allow_exec:cmd+=['--allow-exec']
         if interop_evidence:cmd+=['--interop-evidence',str(interop_evidence.resolve())]
@@ -74,7 +82,7 @@ def run(target:Path,cfg:Config,*,profile:str|None=None,campaign:str|None=None,le
         try:
             if os.environ.get('KRISTALDIAG_TEST_IN_PROCESS')=='1' or ex.get('isolate_levels') is False:
                 from .worker import execute_level
-                data=execute_level(level=lid,target=target,repo=repo_root,config_path=effective,control_dir=cfg.control,run_id=rid,output=out,profile=profile,allow_exec=allow_exec,interop_evidence=interop_evidence)
+                data=execute_level(level=lid,target=target,repo=repo_root,config_path=effective,control_dir=cfg.control,run_id=rid,output=out,profile=profile,allow_exec=allow_exec,interop_evidence=interop_evidence,inventory_cache=inventory_cache)
                 cp=None
             else:
                 env=dict(os.environ);env['PYTHONPATH']=str(repo_root)+(os.pathsep+env['PYTHONPATH'] if env.get('PYTHONPATH') else '')
@@ -124,7 +132,10 @@ def run(target:Path,cfg:Config,*,profile:str|None=None,campaign:str|None=None,le
                 # Dependency graph error / impossible scheduling.
                 for rem in list(pending):
                     b=_blocked(rem,rid,target,{'scheduler':'unresolved dependencies'},profile);results[rem]=b;write_json(current/'levels'/rem/'result.json',b);pending.remove(rem)
-    finally:pool.shutdown(wait=True,cancel_futures=True)
+    finally:
+        pool.shutdown(wait=True,cancel_futures=True)
+        try:shutil.rmtree(cache_dir)
+        except OSError:pass
 
     ordered=[results[x] for x in selected if x in results]
     k14=_k14(ordered,profile,cfg);k14d=k14.to_dict(run_id=rid,target_root=str(target),profile=profile);ordered.append(k14d);write_json(current/'levels/K14/result.json',k14d)
@@ -136,9 +147,8 @@ def run(target:Path,cfg:Config,*,profile:str|None=None,campaign:str|None=None,le
         final='ERROR';k14d['verdict']='ERROR';k14d['findings'].append(Finding('K14-MUTATION-003','ERROR','integrity','Diagnostic target changed while KristalDiag was running.',evidence=mutation,impact='Evidence cannot be trusted as a read-only qualification.').to_dict());write_json(current/'levels/K14/result.json',k14d);ordered[-1]=k14d
     counts={}
     for r in ordered:counts[r['verdict']]=counts.get(r['verdict'],0)+1
-    # Re-discover only for target kind label; no target code executes.
-    from .discovery import discover
-    inv=discover(target,max_files=int(cfg.data.get('max_json_files',10000) or 10000))
+    # Reuse the run inventory for target-kind labeling; do not rescan a large collection.
+    inv=inventory
     summary={'schema':SUMMARY_SCHEMA,'tool':'KristalDiag','tool_version':VERSION,'kristal_standard_target':STANDARD_TARGET,'run_id':rid,'target_root':str(target),'target_kind':target_kind(inv),'profile':profile,'campaign':campaign,'started_at':started,'ended_at':utc_now(),'verdict':final,'counts':counts,'levels':[{'id':r['level_id'],'name':r['level_name'],'verdict':r['verdict'],'result':f"levels/{r['level_id']}/result.json"} for r in ordered]}
     verdict={'schema':VERDICT_SCHEMA,'tool':'KristalDiag','tool_version':VERSION,'kristal_standard_target':STANDARD_TARGET,'run_id':rid,'subject':{'target_root':str(target),'kind':summary['target_kind']},'profile':profile,'campaign':campaign,'verdict':final,'qualification_only':True,'authority_granted':False,'required_levels':k14d.get('metadata',{}).get('required_levels',[]),'evidence_root':'levels/','issued_at':utc_now()}
     write_reports(current,summary,ordered,verdict)

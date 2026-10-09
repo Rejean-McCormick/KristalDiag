@@ -349,12 +349,42 @@ def k24(ctx):
             drift=[]
             if target_lock.get('release')!=vendored.get('release') or target_lock.get('format')!=vendored.get('format'):
                 drift.append({'reason':'lock_header_mismatch','target':{'format':target_lock.get('format'),'release':target_lock.get('release')},'expected':{'format':vendored.get('format'),'release':vendored.get('release')}})
+            errata_doc=None;errata_by_path={};errata_fail=[];accepted_errata=[]
+            ep=ctx.scan_root/'contracts'/'compatibility-errata.json'
+            if ep.is_file():
+                try:
+                    errata_doc=read_json(ep)
+                    if errata_doc.get('format')!='kristal.compatibility-errata/v1':
+                        errata_fail.append({'reason':'format','observed':errata_doc.get('format')})
+                    entries=errata_doc.get('entries') or []
+                    for e in entries:
+                        rel=e.get('path') if isinstance(e,dict) else None
+                        if not rel or rel in errata_by_path:errata_fail.append({'reason':'invalid_or_duplicate_path','path':rel})
+                        else:errata_by_path[rel]=e
+                except Exception as exc:errata_fail.append({'reason':'parse_error','error':f'{type(exc).__name__}: {exc}'})
+            lock_paths=set()
             for row in target_lock.get('files') or []:
-                rel=row.get('path');q=ctx.scan_root/rel if rel else None
+                rel=row.get('path');lock_paths.add(rel);q=ctx.scan_root/rel if rel else None
                 if not q or not q.is_file():drift.append({'path':rel,'reason':'missing'});continue
                 hx='sha256:'+sha256_file(q);size=q.stat().st_size
-                if hx!=row.get('sha256') or size!=row.get('bytes'):drift.append({'path':rel,'reason':'digest_or_size_mismatch','expected_sha256':row.get('sha256'),'observed_sha256':hx,'expected_bytes':row.get('bytes'),'observed_bytes':size})
-            fs.append(_f('K24-LOCK-002','FAIL' if drift else 'PASS','Target v9 compatibility lock freezes inherited v6/v7/v8 bytes exactly.' if not drift else 'Target compatibility lock drift was detected.',evidence=drift or {'entries':len(target_lock.get('files') or [])}))
+                if hx==row.get('sha256') and size==row.get('bytes'):continue
+                e=errata_by_path.get(rel)
+                if not e:
+                    drift.append({'path':rel,'reason':'digest_or_size_mismatch','expected_sha256':row.get('sha256'),'observed_sha256':hx,'expected_bytes':row.get('bytes'),'observed_bytes':size});continue
+                problems=[]
+                if e.get('locked_sha256')!=row.get('sha256') or e.get('locked_bytes')!=row.get('bytes'):problems.append('historical_lock_binding')
+                if e.get('corrected_sha256')!=hx or e.get('corrected_bytes')!=size:problems.append('corrected_bytes_binding')
+                if e.get('semantic_change') is not False:problems.append('semantic_change_must_be_false')
+                mirror=e.get('mirror')
+                if mirror:
+                    m=ctx.scan_root/mirror
+                    if not m.is_file() or m.read_bytes()!=q.read_bytes():problems.append('mirror_mismatch')
+                if problems:drift.append({'path':rel,'reason':'invalid_compatibility_erratum','problems':problems})
+                else:accepted_errata.append({'id':e.get('id'),'path':rel,'locked_sha256':row.get('sha256'),'corrected_sha256':hx})
+            for rel in sorted(set(errata_by_path)-lock_paths):errata_fail.append({'path':rel,'reason':'erratum_path_not_in_v9_lock'})
+            if errata_fail:drift.extend({'reason':'compatibility_errata_invalid',**x} for x in errata_fail)
+            fs.append(_f('K24-LOCK-002','FAIL' if drift else 'PASS','Target v9 compatibility lock and any explicit compatibility errata bind inherited v6/v7/v8 bytes exactly.' if not drift else 'Target compatibility lock/errata drift was detected.',evidence=drift or {'entries':len(target_lock.get('files') or []),'accepted_errata':accepted_errata}))
+            fs.append(_f('K24-ERRATA-004','FAIL' if errata_fail else ('PASS' if errata_doc else 'SKIP'),'Explicit compatibility errata are independently bound to historical lock bytes and corrected active bytes.' if errata_doc and not errata_fail else ('Compatibility errata validation failed.' if errata_fail else 'No compatibility errata declared.'),evidence=errata_fail or accepted_errata or None))
         except Exception as exc:
             fs.append(_f('K24-LOCK-002','ERROR','Could not verify target v9 compatibility lock.',evidence=f'{type(exc).__name__}: {exc}'))
 
@@ -373,6 +403,9 @@ def k24(ctx):
             declared=d.get('state_id');ch=d.get('content_hash') or {}
             if declared!=sid or ch.get('alg')!='sha256' or ch.get('value')!=hx:
                 identity_fail.append({'path':rel,'declared_state_id':declared,'expected_state_id':sid,'declared_content_hash':ch,'expected_sha256':hx})
+            e=errata_by_path.get(rel) if 'errata_by_path' in locals() else None
+            if e and e.get('declared_identity_after') and e.get('declared_identity_after')!=sid:
+                identity_fail.append({'path':rel,'reason':'errata_declared_identity_after_mismatch','errata':e.get('declared_identity_after'),'expected_state_id':sid})
         fs.append(_f('K24-IDENTITY-003','FAIL' if identity_fail else 'PASS','Inherited portable-state TCK artifacts preserve the frozen v6 canonical identity rule.' if not identity_fail else 'An inherited portable-state TCK artifact is schema-valid but has a stale canonical identity.',evidence=identity_fail or {'checked':len(candidates)},impact='A frozen invalid identity vector must be resolved explicitly before final v9 qualification.'))
     else:
         caps=ctx.inv.get('kristal_v9_capabilities')

@@ -5,14 +5,16 @@ KristalDiag is an **independent examiner**, not the normative Kristal Standard a
 ## Automatic gates
 
 1. KristalDiag self-tests on Python 3.11, 3.12 and 3.13 and requires its built-in `V10-Full` corpus to pass.
-2. It checks out `Rejean-McCormick/KristalV10` at the immutable baseline commit `27c0c7db3d79a4597c1c964fe8281fa35b5f858a` and applies `V10-Standard`.
-3. Release audit also runs the broad `release` campaign and verifies evidence-manifest integrity.
+2. CI checks out `Rejean-McCormick/Kristal-Framework` at immutable commit `fe54a88271e2ad7522abacdfbde90f9397954053` and applies `V10-Standard`.
+3. Release audit accepts an explicit Framework ref, runs `V10-Standard`, then the broad `release` campaign and verifies evidence-manifest integrity.
+
+Draft.3.1 is pinned to immutable Framework commit `fe54a88271e2ad7522abacdfbde90f9397954053`. CI deliberately does not substitute floating `main`.
 
 ## Independence boundary
 
-The v9 commitment implementation is Python under `kristaldiag/v9.py`; v10 publication/bundle identity checks are Python under `kristaldiag/v10.py`. The examiner does not execute the Framework JavaScript verifier to manufacture agreement.
+The v9 commitment implementation is Python under `kristaldiag/v9.py`; v10 publication/bundle identity checks and GitHub read-surface/collection checks are Python under `kristaldiag/v10.py`. The examiner does not execute the Framework JavaScript verifier to manufacture agreement.
 
-SchemaStore uses frozen examiner copies rather than target-provided schemas. `kristaldiag/resources/locks/framework-v10.json` records the upstream Framework commit and Git blob identities used for the draft.2 examiner capture.
+SchemaStore uses frozen examiner copies rather than target-provided schemas. `kristaldiag/resources/locks/framework-v10.json` records the exact draft.3.1 candidate snapshot SHA-256 and captured contract hashes. After draft.3.1 is pushed, record its immutable Git commit there as well.
 
 ## Inherited substrate
 
@@ -20,4 +22,4 @@ Historical `V7-*` and v9 profiles remain available. K24 continues to use the fro
 
 ## Lifecycle boundary
 
-Kristal GitHub Setup/Bootstrap owns provisioning, qualification dispatch, publication and activation. KristalDiag may independently examine the resulting repository descriptors, downloaded publication bundles and evidence, but does not mutate those surfaces.
+Kristal Local Kit owns authoring/read-surface construction. Kristal Manager owns local inventory, validation orchestration and GitHub synchronization. Kristal GitHub Setup/Bootstrap owns provisioning, qualification dispatch, publication and activation. KristalDiag may independently examine resulting repository descriptors, hosted read surfaces, collection indexes, downloaded publication bundles and evidence, but does not mutate those surfaces.

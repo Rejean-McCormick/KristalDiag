@@ -1,11 +1,13 @@
 {
   "schema": "kristaldiag.manifest.v4",
   "suite": "KristalDiag",
-  "suite_version": "1.0.0-alpha.1",
-  "kristal_standard_target": "10.0.0-draft.2",
+  "suite_version": "1.0.0-alpha.3",
+  "kristal_standard_target": "10.0.0-draft.3.1",
   "framework_pin": {
-    "repository": "Rejean-McCormick/KristalV10",
-    "commit": "27c0c7db3d79a4597c1c964fe8281fa35b5f858a"
+    "repository": "Rejean-McCormick/Kristal-Framework",
+    "commit": "fe54a88271e2ad7522abacdfbde90f9397954053",
+    "snapshot_sha256": "sha256:aeb41ebe405d9bda5202f36189402be7ab11d28736f93269194c3eb9585710a7",
+    "status": "published_git_commit"
   },
   "repository_mode": "external-target-harness",
   "control_dir_default": ".kristaldiag",
@@ -41,7 +43,7 @@
         "N01"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 120,
+      "timeout_seconds": 300,
       "category": "inventory"
     },
     {
@@ -398,7 +400,7 @@
         "K26"
       ],
       "parallel_safe": true,
-      "timeout_seconds": 180,
+      "timeout_seconds": 1800,
       "category": "v10"
     },
     {

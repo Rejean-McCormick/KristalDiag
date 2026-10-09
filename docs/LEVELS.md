@@ -39,10 +39,10 @@ K00–K13 retain the pre-v9 v6/v7 qualification surface. K14 is the parent-runne
 | K26 | node/binding identity, descriptors and relation coherence |
 | K27 | Publication Record, exact-state binding and independent publication-bundle byte verification |
 | K28 | directory/discovery semantics and exact advertised states/channels |
-| K29 | `kristal.host/github/1.0` profile, locator coherence and credential exclusion |
+| K29 | `kristal.host/github/1.0` profile plus draft.3.1 AI/read-surface, sync-manifest and collection-index integrity |
 | K30 | independently demonstrate semantic-state / hosting separation |
 | K31 | malformed-contract and tampered-bundle adversarial corpus |
-| K32 | Standard `release.json` / `contract-set.json` v10 draft.2 alignment |
+| K32 | Standard `release.json` / `contract-set.json` v10 draft.3.1 alignment |
 
 K32 is a Standard-repository audit level; it is not required by generic node profiles.
 

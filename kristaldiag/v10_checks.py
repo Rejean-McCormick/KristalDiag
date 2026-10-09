@@ -12,7 +12,12 @@ from .schemas import V10_SCHEMAS
 from .utils import read_json, sha256_file, utc_now
 from .verdicts import combine
 from .v9 import is_mutable_selector, state_commitment, verify_declared_state
-from .v10 import find_publication_bundles, publication_identity, sha256_bytes, verify_publication_bundle
+from .v10 import (
+    find_publication_bundles, publication_identity, sha256_bytes, verify_publication_bundle,
+    verify_github_read_surface, verify_github_sync_manifest, verify_github_collection_index,
+    verify_hosted_github_read_surface, verify_hosted_github_collection,
+    GITHUB_READ_SURFACE_FORMAT, GITHUB_SYNC_MANIFEST_FORMAT, GITHUB_COLLECTION_INDEX_FORMAT,
+)
 
 LEVEL_NAMES = {
     'K25': 'V10 Machine Contracts & Capabilities',
@@ -227,8 +232,51 @@ def k29(ctx):
     fs.append(_f('K29-PROFILE-001','FAIL' if fail else 'PASS','GitHub host bindings satisfy the reference profile without embedded reusable credentials.' if not fail else 'GitHub host-profile violations were found.',evidence=fail or {'bindings':len(github)},standard_ref='kristal.host/github/1.0'))
     if warnings:fs.append(_f('K29-CAP-002','WARN','Some optional GitHub surfaces are not advertised; this is capability absence, not semantic nonconformance.',evidence=warnings))
     else:fs.append(_f('K29-CAP-002','PASS','Observed GitHub bindings advertise the optional materialization/attestation surfaces they use.'))
-    return _result('K29',fs,started=s)
 
+    # Draft.3: independently validate the operational AI/read surfaces when present.
+    # These documents are derived hosting/navigation evidence, never semantic authority.
+    read_fail=[];read_counts={'read_surface_documents':0,'sync_manifests':0,'collection_indexes':0,'hosted_surfaces':0}
+    for a in ctx.inv.artifacts:
+        fmt=a.data.get('format')
+        if fmt==GITHUB_READ_SURFACE_FORMAT:
+            read_counts['read_surface_documents']+=1
+            ok,errs=ctx.schemas.validate_github_read_surface(a.data);r=verify_github_read_surface(a.data)
+            if not ok or not r.get('ok'):read_fail.append({'path':a.rel,'kind':'read_surface','schema_errors':errs[:30],'issues':r.get('issues',[])[:50]})
+        elif fmt==GITHUB_SYNC_MANIFEST_FORMAT:
+            read_counts['sync_manifests']+=1
+            ok,errs=ctx.schemas.validate_github_sync_manifest(a.data);r=verify_github_sync_manifest(a.data)
+            if not ok or not r.get('ok'):read_fail.append({'path':a.rel,'kind':'sync_manifest','schema_errors':errs[:30],'issues':r.get('issues',[])[:50]})
+        elif fmt==GITHUB_COLLECTION_INDEX_FORMAT:
+            read_counts['collection_indexes']+=1
+            ok,errs=ctx.schemas.validate_github_collection_index(a.data);r=verify_github_collection_index(a.data)
+            if not ok or not r.get('ok'):read_fail.append({'path':a.rel,'kind':'collection_index','schema_errors':errs[:30],'issues':r.get('issues',[])[:50]})
+
+    root=ctx.scan_root if ctx.scan_root.is_dir() else ctx.scan_root.parent
+    index_file=root/'kristals'/'index.json'
+    if index_file.is_file():
+        result=verify_hosted_github_collection(root,jobs=8)
+        read_counts['hosted_surfaces']=result.get('verified_surfaces',0)
+        if not result.get('ok'):read_fail.append({'path':'kristals/index.json','kind':'hosted_collection','issues':result.get('issues',[])[:200]})
+    else:
+        roots=[]
+        kristals=root/'kristals'
+        if kristals.is_dir():
+            for child in sorted((x for x in kristals.iterdir() if x.is_dir()),key=lambda x:x.name.encode('utf-8')):
+                if (child/'.kristal'/'sync-manifest.json').is_file():roots.append(child)
+        if roots:
+            from concurrent.futures import ThreadPoolExecutor
+            workers=min(8,len(roots))
+            with ThreadPoolExecutor(max_workers=workers) as pool:
+                futs=[(x,pool.submit(verify_hosted_github_read_surface,root,f'kristals/{x.name}')) for x in roots]
+                for child,fut in futs:
+                    result=fut.result();read_counts['hosted_surfaces']+=1
+                    if not result.get('ok'):read_fail.append({'path':f'kristals/{child.name}','kind':'hosted_read_surface','issues':result.get('issues',[])[:100]})
+    observed=sum(read_counts.values())
+    if observed:
+        fs.append(_f('K29-READ-003','FAIL' if read_fail else 'PASS','GitHub draft.3.1 read surfaces, sync manifests and collection navigation are independently byte/digest verified.' if not read_fail else 'GitHub AI/read-surface integrity failures were found.',evidence=read_fail or read_counts,standard_ref='Kristal v10 GitHub Reference Profile draft.3.1',impact='The collection index and AI/read surface are derived discovery surfaces; failures do not redefine the v9 State Commitment.'))
+    else:
+        fs.append(_f('K29-READ-003','SKIP','No draft.3.1 GitHub AI/read-surface document or hosted collection subtree was discovered.'))
+    return _result('K29',fs,metadata={'read_surface_counts':read_counts},started=s)
 
 def k30(ctx):
     s=utc_now();fs=[];fail=[];checked=0
@@ -251,7 +299,7 @@ def k30(ctx):
         after=state_commitment(state);checked+=1
         if before!=after:fail.append({'reason':'host_move_changed_v9_commitment','before':before,'after':after})
         if p1==p2:fail.append({'reason':'distinct_publication_contexts_collapsed','publication_id':p1})
-    fs.append(_f('K30-SEPARATION-001','FAIL' if fail else 'PASS','V10 hosting/publication metadata remains outside independently recomputed v9 semantic commitments.' if not fail else 'Hosting/semantic separation failed.',evidence=fail or {'checks':checked},standard_ref='Kristal v10 core rule: SEMANTIC STATE != HOSTING != PUBLICATION LOCATION != DISCOVERY DIRECTORY'))
+    fs.append(_f('K30-SEPARATION-001','FAIL' if fail else 'PASS','V10 hosting/publication metadata remains outside independently recomputed v9 semantic commitments.' if not fail else 'Hosting/semantic separation failed.',evidence=fail or {'checks':checked},standard_ref='Kristal v10 core rule: SEMANTIC STATE != HOSTING != PUBLICATION LOCATION != DISCOVERY DIRECTORY != READ SURFACE'))
     return _result('K30',fs,started=s)
 
 
@@ -288,9 +336,23 @@ def k31(ctx):
                 if r.get('ok') or not any(x.get('code') in {'DIGEST_MISMATCH','SIZE_MISMATCH','STATE_COMMITMENT_MISMATCH'} for x in r.get('issues',[])):
                     fail.append({'case':'tampered-bundle','reason':'not-detected','result':r})
     except Exception as exc:fail.append({'case':'tampered-bundle','reason':'exception','error':str(exc)})
-    fs.append(_f('K31-NEGATIVE-001','FAIL' if fail else 'PASS','Independent v10 negative corpus rejects malformed contracts and tampered publication bytes without uncaught ordinary validation errors.' if not fail else 'V10 negative/adversarial corpus failures were found.',evidence=fail or {'cases':4},standard_ref='Kristal v10 Conformance draft.2'))
+    # Draft.3 operational surfaces: exact digest and deterministic-order failures must fail closed.
+    try:
+        surface=read_json(Path(__file__).resolve().parent/'resources'/'tck'/'v10'/'github'/'github-read-surface.example.json')
+        bad=copy.deepcopy(surface);bad['surface_digest']='sha256:'+'0'*64
+        ok,errs=ctx.schemas.validate_github_read_surface(bad);r=verify_github_read_surface(bad)
+        if not ok or r.get('ok') or not any(x.get('code')=='DIGEST_MISMATCH' for x in r.get('issues',[])):
+            fail.append({'case':'tampered-read-surface-digest','reason':'not-detected','schema_errors':errs,'result':r})
+    except Exception as exc:fail.append({'case':'tampered-read-surface-digest','reason':'exception','error':str(exc)})
+    try:
+        index=read_json(Path(__file__).resolve().parent/'resources'/'tck'/'v10'/'github'/'github-collection-index.example.json')
+        bad=copy.deepcopy(index);bad['index_digest']='sha256:'+'0'*64
+        ok,errs=ctx.schemas.validate_github_collection_index(bad);r=verify_github_collection_index(bad)
+        if not ok or r.get('ok') or not any(x.get('code')=='DIGEST_MISMATCH' for x in r.get('issues',[])):
+            fail.append({'case':'tampered-collection-index-digest','reason':'not-detected','schema_errors':errs,'result':r})
+    except Exception as exc:fail.append({'case':'tampered-collection-index-digest','reason':'exception','error':str(exc)})
+    fs.append(_f('K31-NEGATIVE-001','FAIL' if fail else 'PASS','Independent v10 negative corpus rejects malformed contracts, tampered publication bytes and draft.3.1 GitHub read-surface digest drift.' if not fail else 'V10 negative/adversarial corpus failures were found.',evidence=fail or {'cases':6},standard_ref='Kristal v10 Conformance draft.3.1'))
     return _result('K31',fs,started=s)
-
 
 def k32(ctx):
     s=utc_now();fs=[];root=ctx.scan_root
@@ -302,18 +364,27 @@ def k32(ctx):
     fail=[]
     try:
         rel=read_json(release);cs=read_json(contract_set)
-        if rel.get('version')!='10.0.0-draft.2':fail.append({'path':'contracts/release.json','reason':'version','observed':rel.get('version'),'expected':'10.0.0-draft.2'})
+        if rel.get('version')!='10.0.0-draft.3.1':fail.append({'path':'contracts/release.json','reason':'version','observed':rel.get('version'),'expected':'10.0.0-draft.3.1'})
         v10=rel.get('v10') if isinstance(rel.get('v10'),dict) else {}
-        if v10.get('semantic_state_baseline')!='kristal.state/9.0' or v10.get('hosted_network_baseline')!='kristal.hosting/10.0' or v10.get('reference_host_profile')!='kristal.host/github/1.0':
-            fail.append({'path':'contracts/release.json','reason':'v10_baseline_mismatch','v10':v10})
-        if cs.get('version')!='10.0.0-draft.2':fail.append({'path':'contracts/contract-set.json','reason':'version','observed':cs.get('version')})
+        required_profiles={
+          'semantic_state_baseline':'kristal.state/9.0',
+          'hosted_network_baseline':'kristal.hosting/10.0',
+          'reference_host_profile':'kristal.host/github/1.0',
+          'github_read_surface_profile':'kristal.github-read-surface/1.0',
+          'github_sync_manifest_profile':'kristal.github-sync-manifest/1.0',
+          'github_collection_index_profile':'kristal.github-collection-index/1.0',
+        }
+        mismatch={k:{'expected':v,'observed':v10.get(k)} for k,v in required_profiles.items() if v10.get(k)!=v}
+        if mismatch:fail.append({'path':'contracts/release.json','reason':'v10_baseline_mismatch','fields':mismatch})
+        if cs.get('version')!='10.0.0-draft.3.1':fail.append({'path':'contracts/contract-set.json','reason':'version','observed':cs.get('version'),'expected':'10.0.0-draft.3.1'})
         required={
-          'schemas/v10/kristal-node-manifest.schema.json','schemas/v10/kristal-host-binding.schema.json','schemas/v10/kristal-publication.schema.json','schemas/v10/kristal-directory.schema.json','schemas/v10/kristal-v10-capabilities.schema.json','profiles/github/schemas/kristal-github-binding.schema.json'
+          'schemas/v10/kristal-node-manifest.schema.json','schemas/v10/kristal-host-binding.schema.json','schemas/v10/kristal-publication.schema.json','schemas/v10/kristal-directory.schema.json','schemas/v10/kristal-v10-capabilities.schema.json',
+          'profiles/github/schemas/kristal-github-binding.schema.json','profiles/github/schemas/kristal-github-read-surface.schema.json','profiles/github/schemas/kristal-github-sync-manifest.schema.json','profiles/github/schemas/kristal-github-collection-index.schema.json'
         }
         listed=set(((cs.get('normative') or {}).get('schemas') or []));missing=sorted(required-listed)
         if missing:fail.append({'path':'contracts/contract-set.json','reason':'missing_v10_schemas','missing':missing})
     except Exception as exc:fail.append({'reason':'exception','error':f'{type(exc).__name__}: {exc}'})
-    fs.append(_f('K32-ALIGN-001','FAIL' if fail else 'PASS','Standard release metadata and contract set advertise the v10 draft.2 hosted-network baseline consistently.' if not fail else 'Standard release/contract-set alignment failures were found.',evidence=fail or {'release':'10.0.0-draft.2'}))
+    fs.append(_f('K32-ALIGN-001','FAIL' if fail else 'PASS','Standard release metadata and contract set advertise the v10 draft.3.1 hosted-network/read-surface baseline consistently.' if not fail else 'Standard release/contract-set alignment failures were found.',evidence=fail or {'release':'10.0.0-draft.3.1'}))
     return _result('K32',fs,started=s)
 
 
