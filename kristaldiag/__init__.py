@@ -1,4 +1,4 @@
-VERSION='1.0.0-alpha.3'
+VERSION='1.0.0-alpha.4'
 STANDARD_TARGET='10.0.0-draft.3.1'
 FRAMEWORK_REPOSITORY='Rejean-McCormick/Kristal-Framework'
 FRAMEWORK_COMMIT='fe54a88271e2ad7522abacdfbde90f9397954053'

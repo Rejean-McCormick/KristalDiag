@@ -1,6 +1,6 @@
 {
   "schema": "kristaldiag.contract-manifest.v2",
-  "tool_version": "1.0.0-alpha.3",
+  "tool_version": "1.0.0-alpha.4",
   "kristal_standard_target": "10.0.0-draft.3.1",
   "files": {
     "contracts/github/kristal-github-binding.schema.json": "6b1f5d4cfc519f536699a19a24d1089b817a14f727152e78b802b861f751b095",

@@ -1,36 +1,44 @@
 {
   "schema": "kristaldiag.repo-manifest.v1",
   "name": "KristalDiag",
-  "version": "1.0.0-alpha.3",
+  "version": "1.0.0-alpha.4",
   "kristal_standard_target": "10.0.0-draft.3.1",
-  "file_count": 348,
+  "file_count": 353,
   "files": {
     ".github/QUALIFICATION.md": {
-      "sha256": "6510e7bbe38bad906c81ae3df51e29d8e132d5f53f56623a03271ad6c05e75bb",
-      "size": 2031
+      "sha256": "2588f6dd39a61afea1ec0b59a55245aa2d261a0a2c1ae6e165ef3f89806c2c36",
+      "size": 2454
     },
     ".github/workflows/ci.yml": {
-      "sha256": "c1a15fb36dcbc1d5362fb7ea192575b385d5e473a2f2e5f7f9df1ea93336ed1b",
-      "size": 3818
+      "sha256": "44dd0a98eccb0ac01929a5777fdfbf1a7567e17ee22c7620b1d4b00f5426bac8",
+      "size": 3833
     },
     ".github/workflows/framework-release-audit.yml": {
-      "sha256": "3c1e97420c90692707d10125e0c87b90eb9bed99e1931aad7efc752dd63dc90e",
-      "size": 3068
+      "sha256": "9d20b767dd50ba3c162d6c8b6d235cd018d37ac3aaedae7a4da22b2cd8e5fb07",
+      "size": 3637
     },
     ".gitignore": {
       "sha256": "0648a33c87f10eb6be0b2f9ae782486b499b36100210038acc9fe9bb1b9c23a1",
       "size": 474
     },
+    "CHANGELOG.md": {
+      "sha256": "a9e01371367bd2bd72f3481e58838b75065dda5df374d8a7bccee182b5ee44c1",
+      "size": 520
+    },
     "README.md": {
-      "sha256": "37266a7c40d82452d930b1fbc451dee9d723eea16604157c97bb53c7c1f2fa58",
-      "size": 5926
+      "sha256": "ad510e8001ffbf3d2b3c79c86916e672b263f0eaa55bf656552f0a53b0a925bd",
+      "size": 6299
     },
     "SECURITY.md": {
       "sha256": "46486a8291660192e24f45f9d6850a454def14142df47f70005824cb40fc1e1c",
       "size": 1107
     },
+    "ZmartZnap.pyw": {
+      "sha256": "70775b94ff616ed9efdb3d6b989639fa3cd22a250f1389fec485791d161df1ea",
+      "size": 22889
+    },
     "contracts/contract-manifest.json": {
-      "sha256": "4015f0f5d72e16609a2ed3c4e6209b8a56c792c7a4e825537afa4055fbdce4c7",
+      "sha256": "2e9198011b3b97d464cf5aa50595991f353619aba5b857f8a76e09b2cda21df3",
       "size": 17720
     },
     "contracts/github/kristal-github-binding.schema.json": {
@@ -185,9 +193,13 @@
       "sha256": "38b2b6126eb0e5cf9ab6eb4a641dbe0c45f1517916eab9aab881a64423302fa3",
       "size": 2569
     },
+    "docs/C1_C2_C3_HANDOFF.md": {
+      "sha256": "675081011c54905244bdc053101b247b8c1e3875143ab481b94fe601f20d6ccf",
+      "size": 2593
+    },
     "docs/CI_INTEGRATION.md": {
-      "sha256": "603083237ca4096a9f0d392a96eafd26c16bdda8b253c32b19ede20459a1d0a7",
-      "size": 774
+      "sha256": "74b6bb679e8c9349ee0ff08dc7d3211ecd92f05486dbbd2204113e6ea874494a",
+      "size": 1320
     },
     "docs/CONFIG_REFERENCE.md": {
       "sha256": "2485e8d9160d9851f8a9af67c1d1e51df994b31e80402e40f9f74374ffe0e721",
@@ -218,12 +230,16 @@
       "size": 1300
     },
     "docs/REPORTING.md": {
-      "sha256": "c51ce97e81072c7e054a988c01787e2ee5d3efaeee01288161f6f1eb0bfc71fd",
-      "size": 957
+      "sha256": "0fb18e9afc9675d31f9c8ae29ab56335e92aaf36e6f32dd17bd0b919a1c20823",
+      "size": 1628
     },
     "docs/SECURITY.md": {
       "sha256": "aca6f08aa7d5539e3199496afc513ef7f7819dd4ae8f8137ba9bf96d0c7f37d7",
       "size": 872
+    },
+    "docs/V10_ALIGNMENT_REPORT.md": {
+      "sha256": "33b58576a4d28aa1183e5fada3455912f72697926985efee732a7bdac24635ad",
+      "size": 4162
     },
     "examples/kristaldiag-driver.example.json": {
       "sha256": "caabe1980b6b6851a9329cd95d7d1eb5376f9dd70b401af727f40fd0f65ca15a",
@@ -290,7 +306,7 @@
       "size": 81
     },
     "kristaldiag/__init__.py": {
-      "sha256": "3856c4741065d317ed1313747595b9c29e068e873127342987e631ae2f720bf9",
+      "sha256": "60217fd042a16c77fc84da48d20e9980552ce1d1d00a33020d31eb55ff184746",
       "size": 457
     },
     "kristaldiag/__main__.py": {
@@ -302,8 +318,8 @@
       "size": 26728
     },
     "kristaldiag/cli.py": {
-      "sha256": "38f1569680ecfae70d70f330b3fc5677c66246e7d794c56ad487a19d2a4bc3f7",
-      "size": 8965
+      "sha256": "c81a357f1a861ae2c6ebe11dbeab03cd843d8a7b7dce508e01af57d68c5f93be",
+      "size": 9394
     },
     "kristaldiag/commands.py": {
       "sha256": "64e96971e4de95e022aade654c182e74c2f5f87c499d4826b4ae20f91ac909b8",
@@ -322,8 +338,8 @@
       "size": 1695
     },
     "kristaldiag/evidence.py": {
-      "sha256": "49cc75eff9a4b6e933e4f826b16ade3f12406cfebcf0096a73f871d8293f5536",
-      "size": 6327
+      "sha256": "64f7fad8f006bb30c7862619a9ee5456ffae0c9ecc95e538c50b81a86c275eb8",
+      "size": 8219
     },
     "kristaldiag/interop.py": {
       "sha256": "14bfcbc2e48595e08826c28018058e5618aabcf8be6c59cbf6d09a540c4c0f23",
@@ -558,7 +574,7 @@
       "size": 812
     },
     "kristaldiag/resources/contract-manifest.json": {
-      "sha256": "4015f0f5d72e16609a2ed3c4e6209b8a56c792c7a4e825537afa4055fbdce4c7",
+      "sha256": "2e9198011b3b97d464cf5aa50595991f353619aba5b857f8a76e09b2cda21df3",
       "size": 17720
     },
     "kristaldiag/resources/contracts/github/kristal-github-binding.schema.json": {
@@ -962,7 +978,7 @@
       "size": 3167
     },
     "kristaldiag_manifest.json": {
-      "sha256": "59a496d64e27f7a7132bc1f7c4f6759c9dbbac7a5a74cf8abbc5dd51f6607dc8",
+      "sha256": "47739e41576540b5c7369f46800e51ea5b14367444772d62accda04f52da94d2",
       "size": 15696
     },
     "levels/__init__.py": {
@@ -1110,7 +1126,7 @@
       "size": 2061
     },
     "pyproject.toml": {
-      "sha256": "24ac789a96863285c217e3eaf11ed567ca224bd43721d4024480c8d997960228",
+      "sha256": "df626fa08eb90ec9dcf904a1e26b6bdab51c11d623c362108885e19e5a00ed5b",
       "size": 814
     },
     "schemas/conformance-verdict.schema.json": {
@@ -1130,8 +1146,8 @@
       "size": 519
     },
     "schemas/level-result.schema.json": {
-      "sha256": "824bdee5c9a8f12d07a6f9fabf31f18bc0548287f081e9b73ab02370c73fb80f",
-      "size": 1633
+      "sha256": "e827a6ccb00ab6c1f068771d3f43a8ddfa62845befc30b3d4d71d676a52b09c4",
+      "size": 1640
     },
     "schemas/summary.schema.json": {
       "sha256": "a05ce51388ac645a47c1601db38a1bf59049e41edded525dc7129e0888a41882",
@@ -1392,6 +1408,10 @@
     "tests/test_v10.py": {
       "sha256": "21b251ae304489514db533ee2df16d4fa94808a86685b3d0be88cffb121cd203",
       "size": 11966
+    },
+    "tests/test_v10_evidence_alignment.py": {
+      "sha256": "850f22beb7414ecf7d9f773693bc9a4db414bd18eb333b977cb360792eb7f85d",
+      "size": 4644
     },
     "tests/test_v9.py": {
       "sha256": "fef4e76862590bb24dd3acfa0de9582a376ca7a389faeb21755d5ea87cdb0828",

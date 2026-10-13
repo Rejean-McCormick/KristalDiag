@@ -21,7 +21,7 @@ def parser():
     co=sub.add_parser('conform');co.add_argument('target');co.add_argument('--profile',choices=list(PROFILES),required=True);co.add_argument('--control-dir');co.add_argument('--allow-exec',action='store_true');co.add_argument('--interop-evidence');co.add_argument('--jobs',type=int);co.add_argument('--json',action='store_true')
     l=sub.add_parser('run-level');l.add_argument('level',choices=list(LEVELS));l.add_argument('target');l.add_argument('--profile',choices=list(PROFILES));l.add_argument('--control-dir');l.add_argument('--allow-exec',action='store_true');l.add_argument('--json',action='store_true')
     t=sub.add_parser('triage-current');t.add_argument('target',nargs='?',default='.')
-    v=sub.add_parser('verify-run');v.add_argument('summary')
+    v=sub.add_parser('verify-run');v.add_argument('summary');v.add_argument('--require-pass',action='store_true',help='Reject valid-but-non-PASS evidence (still not a signed C1 receipt)')
     io=sub.add_parser('interop');io.add_argument('producer');io.add_argument('consumer');io.add_argument('--output',required=True);io.add_argument('--allow-exec',action='store_true')
     st=sub.add_parser('self-test');st.add_argument('--standard-root')
     return p
@@ -78,7 +78,14 @@ def main(argv=None):
             ok,detail=verify_run(Path(a.summary),repo);print('VALID' if ok else 'INVALID')
             if not ok:
                 for problem in detail.get('problems',[]):print(' - '+json.dumps(problem,ensure_ascii=False,sort_keys=True))
-            return 0 if ok else 30
+            if not ok:
+                return 30
+            if a.require_pass:
+                verdict = read_json(Path(a.summary)).get('verdict')
+                if verdict != 'PASS':
+                    print(f'NOT QUALIFIED: evidence integrity is valid, but verdict is {verdict}.')
+                    return 20
+            return 0
         if a.cmd=='interop':
             from .interop import run_interop
             r=run_interop(Path(a.producer),Path(a.consumer),repo_root=repo,output=Path(a.output),allow_exec=a.allow_exec);print(json.dumps(r,ensure_ascii=False,indent=2));return exit_code(r.get('verdict','ERROR'))

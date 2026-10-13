@@ -23,3 +23,11 @@ Historical `V7-*` and v9 profiles remain available. K24 continues to use the fro
 ## Lifecycle boundary
 
 Kristal Local Kit owns authoring/read-surface construction. Kristal Manager owns local inventory, validation orchestration and GitHub synchronization. Kristal GitHub Setup/Bootstrap owns provisioning, qualification dispatch, publication and activation. KristalDiag may independently examine resulting repository descriptors, hosted read surfaces, collection indexes, downloaded publication bundles and evidence, but does not mutate those surfaces.
+
+## Alpha.4 verifier hardening
+
+Level results K25–K32 are now recognized by the persisted evidence schema.
+The verification gate rejects unsafe evidence paths and, with `--require-pass`,
+valid-but-non-PASS evidence. This **does not create a signed C1 receipt** or
+C2 permission: external signature and owner-grant verification must be agreed
+with their respective owners before a public sync/publish pipeline is enabled.

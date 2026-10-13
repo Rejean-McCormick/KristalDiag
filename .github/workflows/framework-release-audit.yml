@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       framework_ref:
-        description: "Kristal-Framework commit/tag to audit"
+        description: "Immutable 40-character Kristal-Framework commit SHA to audit"
         required: true
 
 permissions:
@@ -16,6 +16,14 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
+      - name: Reject floating Framework references
+        env:
+          FRAMEWORK_REF: ${{ inputs.framework_ref }}
+        run: |
+          if ! [[ "$FRAMEWORK_REF" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "Framework reference must be an exact 40-character commit SHA."
+            exit 1
+          fi
       - name: Checkout KristalDiag
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
@@ -29,6 +37,11 @@ jobs:
           path: Kristal-Framework
           fetch-depth: 0
           persist-credentials: false
+      - name: Verify selected immutable Framework commit
+        env:
+          FRAMEWORK_REF: ${{ inputs.framework_ref }}
+        run: |
+          test "$(git -C Kristal-Framework rev-parse HEAD)" = "${FRAMEWORK_REF,,}"
       - name: Setup Python
         uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
         with:
@@ -53,7 +66,7 @@ jobs:
         run: |
           for d in "$RUNNER_TEMP/kristaldiag-v10" "$RUNNER_TEMP/kristaldiag-release"; do
             if [ -f "$d/current/summary.json" ]; then
-              kristaldiag verify-run "$d/current/summary.json"
+              kristaldiag verify-run "$d/current/summary.json" --require-pass
             fi
           done
       - name: Prepare audit evidence

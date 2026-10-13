@@ -1,7 +1,7 @@
 {
   "schema": "kristaldiag.manifest.v4",
   "suite": "KristalDiag",
-  "suite_version": "1.0.0-alpha.3",
+  "suite_version": "1.0.0-alpha.4",
   "kristal_standard_target": "10.0.0-draft.3.1",
   "framework_pin": {
     "repository": "Rejean-McCormick/Kristal-Framework",

@@ -23,6 +23,29 @@ def _validate(schema: dict[str, Any], payload: Any) -> list[str]:
     return out
 
 
+def _evidence_member(root: Path, rel: Any) -> Path | None:
+    """Only read explicitly listed, real files *inside* the evidence tree.
+
+    The target controls its evidence documents. An absolute path, traversal,
+    Windows separator, symlink, or non-canonical POSIX name is never followed.
+    """
+    from pathlib import PurePosixPath
+    if not isinstance(rel, str) or not rel or rel.startswith('/') or "\\" in rel:
+        return None
+    parts = PurePosixPath(rel).parts
+    if any(part in ('.', '..') for part in parts) or ':' in parts[0]:
+        return None
+    # Reject double separators and redundant dot segments (canonical names only).
+    if PurePosixPath(rel).as_posix() != rel or any(part in ('.', '..', '') for part in rel.split('/')):
+        return None
+    candidate = root.joinpath(*parts)
+    if any(p.is_symlink() for p in (candidate, *list(candidate.parents)[:len(parts)-1])):
+        return None
+    if not candidate.resolve(strict=False).is_relative_to(root.resolve()):
+        return None
+    return candidate
+
+
 def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any]]:
     """Verify a persisted KristalDiag evidence tree without executing the target."""
     summary_path = summary_path.resolve()
@@ -46,7 +69,10 @@ def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any
         if not isinstance(rel, str) or not rel:
             problems.append({'kind': 'level-result-path', 'level': row.get('id')})
             continue
-        p = root / rel
+        p = _evidence_member(root, rel)
+        if p is None:
+            problems.append({'kind': 'unsafe-level-result-path', 'path': rel})
+            continue
         if not p.is_file():
             problems.append({'kind': 'missing-level-result', 'path': rel})
             continue
@@ -66,8 +92,8 @@ def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any
         if payload.get('verdict') != row.get('verdict'):
             problems.append({'kind': 'level-verdict-mismatch', 'path': rel, 'expected': row.get('verdict'), 'observed': payload.get('verdict')})
 
-    verdict_path = root / 'conformance-verdict.json'
-    if not verdict_path.is_file():
+    verdict_path = _evidence_member(root, 'conformance-verdict.json')
+    if verdict_path is None or not verdict_path.is_file():
         problems.append({'kind': 'missing-conformance-verdict', 'path': 'conformance-verdict.json'})
     else:
         try:
@@ -83,8 +109,8 @@ def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any
         except Exception as exc:
             problems.append({'kind': 'verdict-read', 'detail': f'{type(exc).__name__}: {exc}'})
 
-    manifest_path = root / 'evidence-manifest.json'
-    if not manifest_path.is_file():
+    manifest_path = _evidence_member(root, 'evidence-manifest.json')
+    if manifest_path is None or not manifest_path.is_file():
         problems.append({'kind': 'missing-evidence-manifest', 'path': 'evidence-manifest.json'})
     else:
         try:
@@ -98,7 +124,13 @@ def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any
                 problems.append({'kind': 'manifest-files-type'})
                 files = {}
             for rel, expected in sorted(files.items()):
-                p = root / rel
+                p = _evidence_member(root, rel)
+                if p is None:
+                    problems.append({'kind': 'unsafe-manifest-file-path', 'path': rel})
+                    continue
+                if not isinstance(expected, str) or __import__('re').fullmatch(r'[a-f0-9]{64}', expected) is None:
+                    problems.append({'kind': 'invalid-manifest-digest', 'path': rel})
+                    continue
                 if not p.is_file():
                     problems.append({'kind': 'manifest-missing-file', 'path': rel})
                     continue
@@ -108,9 +140,12 @@ def verify_run(summary_path: Path, repo_root: Path) -> tuple[bool, dict[str, Any
             actual = {
                 p.relative_to(root).as_posix()
                 for p in root.rglob('*')
-                if p.is_file() and p.name != 'evidence-manifest.json'
+                if p.is_file() and p.name != 'evidence-manifest.json' and not p.is_symlink()
             }
             declared = set(files)
+            symlinks = [p.relative_to(root).as_posix() for p in root.rglob('*') if p.is_symlink()]
+            for rel in sorted(symlinks):
+                problems.append({'kind': 'evidence-symlink', 'path': rel})
             for rel in sorted(actual - declared):
                 problems.append({'kind': 'manifest-untracked-file', 'path': rel})
             for rel in sorted(declared - actual):

@@ -20,3 +20,13 @@ current/
 Verdicts: `PASS`, `WARN`, `FAIL`, `SKIP`, `BLOCKED`, `PARTIAL`, `ERROR`, `INFRA_ERROR`, `CONFIG_ERROR`.
 
 An optional level that executes and observes a real `FAIL` still fails the diagnostic campaign. “Optional” changes completeness requirements, not observed truth.
+
+`verify-run SUMMARY` verifies only the internal evidence tree: schema consistency,
+reported level verdicts and file SHA-256. `verify-run SUMMARY --require-pass` additionally
+returns a failure exit code if the observed summary verdict is not `PASS`.
+Neither mode establishes signer authenticity, independent C1 approval or a C2 grant.
+The evidence manifest is **not signed**, and an attacker controlling the entire evidence
+tree could replace both evidence files and their hashes. Treat its provenance separately.
+
+All evidence paths are interpreted as canonical relative POSIX paths, restricted to the
+evidence tree; symlinks, traversal and absolute names are rejected.

@@ -91,7 +91,7 @@ jobs:
         if: always()
         run: |
           if [ -f "$RUNNER_TEMP/kristaldiag-v10/current/summary.json" ]; then
-            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-v10/current/summary.json"
+            kristaldiag verify-run "$RUNNER_TEMP/kristaldiag-v10/current/summary.json" --require-pass
           else
             echo "No KristalDiag summary was produced."
             exit 1

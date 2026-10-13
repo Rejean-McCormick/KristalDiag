@@ -56,6 +56,13 @@ kristaldiag run release /path/to/Kristal-Framework
 ```
 
 
+## Evidence and inter-repository alignment (alpha.4)
+
+The v10 evidence schema now supports K25–K32; `verify-run` rejects unsafe
+paths and checks persisted result/digest coherence. CI can require both evidence
+integrity and an actual PASS with `--require-pass`. This is **not** a signed C1
+receipt or a C2 authorization. See [C1/C2/C3 handoff](docs/C1_C2_C3_HANDOFF.md).
+
 ## Draft.3 GitHub AI/read-surface verification
 
 KristalDiag independently verifies the operational contracts used by Local Kit 3.2.4, Manager alpha.11 and the GitHub collection workflow:
