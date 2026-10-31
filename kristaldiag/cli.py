@@ -24,6 +24,10 @@ def parser():
     v=sub.add_parser('verify-run');v.add_argument('summary');v.add_argument('--require-pass',action='store_true',help='Reject valid-but-non-PASS evidence (still not a signed C1 receipt)')
     io=sub.add_parser('interop');io.add_argument('producer');io.add_argument('consumer');io.add_argument('--output',required=True);io.add_argument('--allow-exec',action='store_true')
     st=sub.add_parser('self-test');st.add_argument('--standard-root')
+    ark=sub.add_parser('archetype', help='Compare declared ARK to observable canonical JSON structure; advisory only')
+    ark.add_argument('target');ark.add_argument('--arketype-root');ark.add_argument('--all',action='store_true',help='Inspect all Kristals under the parent')
+    ark.add_argument('--output',help='Write JSON report to a specified path (not to canonical source)')
+    ark.add_argument('--json',action='store_true')
     return p
 
 def _print(summary,current,json_mode=False):
@@ -34,6 +38,19 @@ def _print(summary,current,json_mode=False):
 def main(argv=None):
     a=parser().parse_args(argv);repo=Path(__file__).resolve().parents[1]
     try:
+        if a.cmd=='archetype':
+            from .archetype_check import inspect as inspect_archetype
+            output = inspect_archetype(a.target, a.arketype_root, all_projects=a.all)
+            payload = json.dumps(output, ensure_ascii=False, indent=2)
+            if a.output:
+                dest=Path(a.output).expanduser().resolve()
+                target=Path(a.target).expanduser().resolve()
+                # Avoid writing to the target canon, even by mistake.
+                if dest == target or dest.is_relative_to(target/'canon'):
+                    raise ValueError('Rapport interdit sous canon/; choisis un emplacement de rapports.')
+                dest.parent.mkdir(parents=True,exist_ok=True);dest.write_text(payload+'\n',encoding='utf-8')
+            print(payload)
+            return 0
         if a.cmd=='list':
             for k,m in LEVELS.items():print(f'{k}  {m["name"]}')
             print('\nCampaigns:');[print(f'{k}: '+', '.join(v)) for k,v in CAMPAIGNS.items()]
