@@ -3,7 +3,7 @@
   "name": "KristalDiag",
   "version": "1.0.0-alpha.4",
   "kristal_standard_target": "10.0.0-draft.3.1",
-  "file_count": 353,
+  "file_count": 356,
   "files": {
     ".github/QUALIFICATION.md": {
       "sha256": "2588f6dd39a61afea1ec0b59a55245aa2d261a0a2c1ae6e165ef3f89806c2c36",
@@ -18,12 +18,12 @@
       "size": 3637
     },
     ".gitignore": {
-      "sha256": "0648a33c87f10eb6be0b2f9ae782486b499b36100210038acc9fe9bb1b9c23a1",
-      "size": 474
+      "sha256": "5bf1ab2dd82a92211a5eba71ca1a8b728c85d4c4b34d8a34cf7378c13adfa9b4",
+      "size": 488
     },
     "CHANGELOG.md": {
-      "sha256": "a9e01371367bd2bd72f3481e58838b75065dda5df374d8a7bccee182b5ee44c1",
-      "size": 520
+      "sha256": "269121f8323512f65f7afe35ea558328d4e0d3ba93d4fd6a989ef65d18055593",
+      "size": 1040
     },
     "README.md": {
       "sha256": "ad510e8001ffbf3d2b3c79c86916e672b263f0eaa55bf656552f0a53b0a925bd",
@@ -32,10 +32,6 @@
     "SECURITY.md": {
       "sha256": "46486a8291660192e24f45f9d6850a454def14142df47f70005824cb40fc1e1c",
       "size": 1107
-    },
-    "ZmartZnap.pyw": {
-      "sha256": "70775b94ff616ed9efdb3d6b989639fa3cd22a250f1389fec485791d161df1ea",
-      "size": 22889
     },
     "contracts/contract-manifest.json": {
       "sha256": "2e9198011b3b97d464cf5aa50595991f353619aba5b857f8a76e09b2cda21df3",
@@ -225,6 +221,10 @@
       "sha256": "343e6166d6994559e485714f1f105f70f026afa23f51d7b1a28a2d96b2077a91",
       "size": 2304
     },
+    "docs/N03_N06_FILE_CONTEXT.md": {
+      "sha256": "9ccef9497e7a7f0ccd9f6f2d2b398f4ed519853f89497126fed36055b826620b",
+      "size": 2798
+    },
     "docs/OPERATING_MODEL.md": {
       "sha256": "d3921788da81625466cfbdc0eaba50d32c08421b318b6c2b0c236c509df15916",
       "size": 1300
@@ -313,13 +313,17 @@
       "sha256": "79ee6f134c5c5193377cf9b189cbdcc3e2095e49ba9cec310114441c15a917c4",
       "size": 47
     },
+    "kristaldiag/archetype_check.py": {
+      "sha256": "b765932c3a38a625ea4d043aaf7b8f218ee1eb788bf50de2b7443d63a7668597",
+      "size": 857
+    },
     "kristaldiag/checks.py": {
       "sha256": "9ff981ca15f3a95f2c828727a80e6f60a8f7617c1d5fe2472bbd41a765267d73",
       "size": 26728
     },
     "kristaldiag/cli.py": {
-      "sha256": "c81a357f1a861ae2c6ebe11dbeab03cd843d8a7b7dce508e01af57d68c5f93be",
-      "size": 9394
+      "sha256": "eb72e3b8f33adab3501402e0d7e7a7cfcb57aa3102997edc11ab77be24c8333a",
+      "size": 10636
     },
     "kristaldiag/commands.py": {
       "sha256": "64e96971e4de95e022aade654c182e74c2f5f87c499d4826b4ae20f91ac909b8",
@@ -341,6 +345,10 @@
       "sha256": "64f7fad8f006bb30c7862619a9ee5456ffae0c9ecc95e538c50b81a86c275eb8",
       "size": 8219
     },
+    "kristaldiag/file_context.py": {
+      "sha256": "342bb230abbdbfb97c565a3a483b91732728d064c5b09df7f196af9c8748ec44",
+      "size": 4131
+    },
     "kristaldiag/interop.py": {
       "sha256": "14bfcbc2e48595e08826c28018058e5618aabcf8be6c59cbf6d09a540c4c0f23",
       "size": 4405
@@ -358,8 +366,8 @@
       "size": 1863
     },
     "kristaldiag/neutral.py": {
-      "sha256": "d6f5caff126fba513540d887875fa15053ff4744147957d73d3186e561d70a6c",
-      "size": 13502
+      "sha256": "93188c69c72aaa5e329d205e87f4326b58896d4c94425f0aed146013380d5d6f",
+      "size": 14991
     },
     "kristaldiag/profiles.py": {
       "sha256": "d25458a84b65b36966bc483cb6bf4436361a861ca162ea072d81f4da63ae5c66",
@@ -1388,6 +1396,10 @@
     "tests/test_driver.py": {
       "sha256": "57987b67bfef6585a6181049a7035e3bd80951593d8448dd6dac395296195688",
       "size": 923
+    },
+    "tests/test_file_context.py": {
+      "sha256": "bcdbcbe913cd2bc0ef01a153cbcf073e41ab16206ee6092771ee379acef70a30",
+      "size": 3410
     },
     "tests/test_interop.py": {
       "sha256": "83d55e4f2a799e8a5b65a3a66aa212d16c021cf46e9ee2f99f0877797030c9bc",
