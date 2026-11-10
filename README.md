@@ -151,3 +151,5 @@ kristaldiag verify-run /path/to/current/summary.json
 ```
 
 See `docs/LEVELS.md`, `docs/CONFORMANCE.md`, `docs/ARCHITECTURE.md` and `docs/CI_INTEGRATION.md`.
+
+> **Final-system Branch 03 alignment (2026-11-09):** See [the release/distribution/exploration integration note](docs/FINAL_SYSTEM_BRANCH03.md). The seven-owner pipeline is a target with independently gated qualification, permission, packaging and readers. This source snapshot does not authorize public publication or deployment.
